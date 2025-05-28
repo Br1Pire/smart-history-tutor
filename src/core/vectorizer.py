@@ -1,23 +1,29 @@
 """
 vectorizer.py
 
-Convierte documentos históricos en embeddings y los almacena en ChromaDB para búsquedas semánticas.
+Convierte documentos históricos en embeddings y los almacena en un índice FAISS para búsquedas semánticas.
 """
 
 import os
 import json
+import faiss
+import numpy as np
 from sentence_transformers import SentenceTransformer
-import chromadb
 from tqdm import tqdm
-
+import pickle
 
 # Configuración
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 MODEL_NAME = 'sentence-transformers/all-MiniLM-L6-v2'
-INPUT_PATH = os.path.join(BASE_DIR, "data", "raw","wikipedia_historia_es.json")
-CHROMA_DIR = os.path.join(BASE_DIR, "data", "vector_store")
-COLLECTION_NAME = "historia_universal"
+INPUT_PATH = os.path.join(BASE_DIR, "data", "raw", "wikipedia_historia_es.json")
+
+# Ruta interna segura dentro del proyecto
+VECTOR_STORE_DIR = os.path.join(BASE_DIR, "data", "vectorstore_faiss")
+
+FAISS_INDEX_PATH = os.path.join(VECTOR_STORE_DIR, "faiss_index.index")
+TEXTS_PATH = os.path.join(VECTOR_STORE_DIR, "texts.pkl")
+IDS_PATH = os.path.join(VECTOR_STORE_DIR, "ids.pkl")
 
 def load_documents(path):
     """Carga documentos desde un archivo JSON"""
@@ -35,19 +41,23 @@ def create_embeddings(model, documents):
     ids = [doc["title"] for doc in documents]
     return ids, texts, embeddings
 
-def save_to_chroma(ids, texts, embeddings):
-    """Guarda embeddings y textos en ChromaDB"""
-    client = chromadb.PersistentClient(path=str(CHROMA_DIR))
-    collection = client.get_or_create_collection(name=COLLECTION_NAME)
+def save_to_faiss(ids, texts, embeddings):
+    """Guarda embeddings y textos en un índice FAISS"""
+    os.makedirs(VECTOR_STORE_DIR, exist_ok=True)
 
-    for i in tqdm(range(len(ids)), desc="🔄 Guardando en ChromaDB"):
-        collection.add(
-            documents=[texts[i]],
-            embeddings=[embeddings[i].tolist()],
-            ids=[ids[i]]
-        )
+    dim = embeddings.shape[1]
+    index = faiss.IndexFlatL2(dim)
+    index.add(embeddings)
 
-    print(f"\n✅ Guardados {len(ids)} documentos en el repositorio vectorial: {CHROMA_DIR}")
+    faiss.write_index(index, FAISS_INDEX_PATH)
+
+    with open(TEXTS_PATH, "wb") as f:
+        pickle.dump(texts, f)
+
+    with open(IDS_PATH, "wb") as f:
+        pickle.dump(ids, f)
+
+    print(f"\n✅ Guardados {len(ids)} documentos en el índice FAISS: {FAISS_INDEX_PATH}")
 
 def main():
     print("📦 Cargando modelo y documentos...")
@@ -56,9 +66,10 @@ def main():
 
     print("🧠 Generando embeddings...")
     ids, texts, embeddings = create_embeddings(model, documents)
+    embeddings = np.array(embeddings).astype("float32")
 
-    print("💾 Guardando en el repositorio vectorial (ChromaDB)...")
-    save_to_chroma(ids, texts, embeddings)
+    print("💾 Guardando en el índice FAISS...")
+    save_to_faiss(ids, texts, embeddings)
 
 if __name__ == "__main__":
     main()
