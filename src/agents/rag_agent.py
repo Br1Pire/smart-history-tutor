@@ -1,37 +1,58 @@
-from sentence_transformers import SentenceTransformer
-import chromadb
-import os
+"""
+rag_agent.py
 
-CHROMA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "vector_store")
-COLLECTION_NAME = "historia_universal"
-MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
+Agente RAG que responde preguntas de historia consultando un índice FAISS previamente creado.
+"""
+
+import os
+import pickle
+import faiss
+import numpy as np
+from sentence_transformers import SentenceTransformer
+
+# Configuración de rutas
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+VECTOR_STORE_DIR = os.path.join(BASE_DIR, "data", "vectorstore_faiss")
+FAISS_INDEX_PATH = os.path.join(VECTOR_STORE_DIR, "faiss_index.index")
+TEXTS_PATH = os.path.join(VECTOR_STORE_DIR, "texts.pkl")
+IDS_PATH = os.path.join(VECTOR_STORE_DIR, "ids.pkl")
+
+# Modelo de embeddings
+MODEL_NAME = 'sentence-transformers/all-MiniLM-L6-v2'
 
 class RAGAgent:
     def __init__(self, top_k=5):
-        self.vectorizer = SentenceTransformer(MODEL_NAME)
-        self.client = chromadb.Client(
-            settings=chromadb.Settings(
-                persist_directory=CHROMA_DIR,
-                anonymized_telemetry=False
-            )
-        )
-        self.collection = self.client.get_or_create_collection(name=COLLECTION_NAME)
         self.top_k = top_k
+        self.model = SentenceTransformer(MODEL_NAME)
+        self.index = faiss.read_index(FAISS_INDEX_PATH)
 
-    def query(self, pregunta):
-        embedding = self.vectorizer.encode(pregunta).tolist()
-        resultados = self.collection.query(
-            query_embeddings=[embedding],
-            n_results=self.top_k,
-            include=["documents"]
-        )
-        return resultados["documents"][0]
+        with open(TEXTS_PATH, "rb") as f:
+            self.texts = pickle.load(f)
 
-# Modo de prueba
-if __name__ == "__main__":
-    agente = RAGAgent()
-    pregunta = input("🤔 Escribe tu pregunta sobre historia: ")
+        with open(IDS_PATH, "rb") as f:
+            self.ids = pickle.load(f)
+
+    def query(self, question):
+        embedding = self.model.encode([question]).astype("float32")
+        distances, indices = self.index.search(embedding, self.top_k)
+
+        results = []
+        for i in indices[0]:
+            if 0 <= i < len(self.texts):
+                results.append(self.texts[i])
+
+        return results
+
+
+def main():
+    agente = RAGAgent(top_k=10)
+    pregunta = input("\n🤔 Escribe tu pregunta sobre historia: ")
     resultados = agente.query(pregunta)
+
     print("\n📚 Resultados relevantes:")
-    for i, doc in enumerate(resultados):
-        print(f"\n[{i+1}] {doc[:400]}...")
+    for i, texto in enumerate(resultados, 1):
+        print(f"\n[{i}] {texto[:500]}...")
+
+
+if __name__ == "__main__":
+    main()
