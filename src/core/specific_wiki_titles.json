@@ -1,0 +1,2278 @@
+[
+  {
+    "id": 1,
+    "query": "Globalización"
+  },
+  {
+    "id": 2,
+    "query": "Guerra en Ucrania"
+  },
+  {
+    "id": 3,
+    "query": "La revolución haitiana"
+  },
+  {
+    "id": 4,
+    "query": "Alejandro Magno"
+  },
+  {
+    "id": 5,
+    "query": "La dinastía Tudor en Inglaterra"
+  },
+  {
+    "id": 6,
+    "query": "La guerra civil libanesa"
+  },
+  {
+    "id": 7,
+    "query": "La expansión del Imperio Otomano en Europa"
+  },
+  {
+    "id": 8,
+    "query": "La historia de la monarquía constitucional británica"
+  },
+  {
+    "id": 9,
+    "query": "El proceso de descolonización en África"
+  },
+  {
+    "id": 10,
+    "query": "La guerra entre Paraguay y Bolivia"
+  },
+  {
+    "id": 11,
+    "query": "La restauración Meiji"
+  },
+  {
+    "id": 12,
+    "query": "La liga de Delos"
+  },
+  {
+    "id": 13,
+    "query": "Jeroglíficos"
+  },
+  {
+    "id": 14,
+    "query": "La historia de la guerra civil inglesa"
+  },
+  {
+    "id": 15,
+    "query": "El movimiento de los derechos civiles en EE.UU."
+  },
+  {
+    "id": 16,
+    "query": "La creación del Tribunal Penal Internacional"
+  },
+  {
+    "id": 17,
+    "query": "El imperio de Carlomagno"
+  },
+  {
+    "id": 18,
+    "query": "Cleopatra"
+  },
+  {
+    "id": 19,
+    "query": "Galileo Galilei"
+  },
+  {
+    "id": 20,
+    "query": "La historia del conflicto en Cachemira"
+  },
+  {
+    "id": 21,
+    "query": "La revolución de los claveles"
+  },
+  {
+    "id": 22,
+    "query": "El conflicto entre China y Taiwán"
+  },
+  {
+    "id": 23,
+    "query": "La Ilustración"
+  },
+  {
+    "id": 24,
+    "query": "Código de Hammurabi"
+  },
+  {
+    "id": 25,
+    "query": "La dinastía Tokugawa"
+  },
+  {
+    "id": 26,
+    "query": "Mahatma Gandhi"
+  },
+  {
+    "id": 27,
+    "query": "La revuelta de los cipayos"
+  },
+  {
+    "id": 28,
+    "query": "Conflicto de los Balcanes"
+  },
+  {
+    "id": 29,
+    "query": "La historia del conflicto kurdo"
+  },
+  {
+    "id": 30,
+    "query": "La Revolución de 1848 en Europa"
+  },
+  {
+    "id": 31,
+    "query": "Bloqueo de Berlín"
+  },
+  {
+    "id": 32,
+    "query": "Reinos cristianos en la península ibérica"
+  },
+  {
+    "id": 33,
+    "query": "La invención del papel moneda"
+  },
+  {
+    "id": 34,
+    "query": "La guerra de Vietnam"
+  },
+  {
+    "id": 35,
+    "query": "Inteligencia artificial"
+  },
+  {
+    "id": 36,
+    "query": "La Guerra de Malvinas"
+  },
+  {
+    "id": 37,
+    "query": "La república de Weimar"
+  },
+  {
+    "id": 38,
+    "query": "Voltaire"
+  },
+  {
+    "id": 39,
+    "query": "La historia de los filibusteros"
+  },
+  {
+    "id": 40,
+    "query": "La Guerra del Pacífico entre Chile, Perú y Bolivia"
+  },
+  {
+    "id": 41,
+    "query": "La guerra de la Triple Alianza"
+  },
+  {
+    "id": 42,
+    "query": "La guerra civil rusa"
+  },
+  {
+    "id": 43,
+    "query": "Renacimiento"
+  },
+  {
+    "id": 44,
+    "query": "La dinastía Selyúcida"
+  },
+  {
+    "id": 45,
+    "query": "El imperio de Ghana"
+  },
+  {
+    "id": 46,
+    "query": "La historia de la diplomacia en la Edad Moderna"
+  },
+  {
+    "id": 47,
+    "query": "El genocidio armenio"
+  },
+  {
+    "id": 48,
+    "query": "La civilización minoica"
+  },
+  {
+    "id": 49,
+    "query": "La Revolución Verde"
+  },
+  {
+    "id": 50,
+    "query": "El congreso de Berlín de 1878"
+  },
+  {
+    "id": 51,
+    "query": "Julio César"
+  },
+  {
+    "id": 52,
+    "query": "La batalla de Manzikert"
+  },
+  {
+    "id": 53,
+    "query": "El conflicto entre Etiopía y Eritrea"
+  },
+  {
+    "id": 54,
+    "query": "La historia de la revolución bolivariana"
+  },
+  {
+    "id": 55,
+    "query": "La historia del conflicto en Irlanda del Norte"
+  },
+  {
+    "id": 56,
+    "query": "Dinastía Qin"
+  },
+  {
+    "id": 57,
+    "query": "La Guerra del Chaco"
+  },
+  {
+    "id": 58,
+    "query": "Guerra Fría"
+  },
+  {
+    "id": 59,
+    "query": "La historia de la república de Venecia"
+  },
+  {
+    "id": 60,
+    "query": "Ilustración"
+  },
+  {
+    "id": 61,
+    "query": "La independencia de Indonesia"
+  },
+  {
+    "id": 62,
+    "query": "La guerra de secesión de Pakistán"
+  },
+  {
+    "id": 63,
+    "query": "Descubrimiento de América"
+  },
+  {
+    "id": 64,
+    "query": "La expansión del islam en África"
+  },
+  {
+    "id": 65,
+    "query": "La independencia de México"
+  },
+  {
+    "id": 66,
+    "query": "Hitler"
+  },
+  {
+    "id": 67,
+    "query": "La historia de los samuráis"
+  },
+  {
+    "id": 68,
+    "query": "La historia del conflicto en Georgia"
+  },
+  {
+    "id": 69,
+    "query": "La batalla de Lepanto"
+  },
+  {
+    "id": 70,
+    "query": "La historia del movimiento obrero en el siglo XIX"
+  },
+  {
+    "id": 71,
+    "query": "La historia del apartheid en Sudáfrica"
+  },
+  {
+    "id": 72,
+    "query": "La independencia de Brasil"
+  },
+  {
+    "id": 73,
+    "query": "La guerra de los Balcanes"
+  },
+  {
+    "id": 74,
+    "query": "La creación de la ONU"
+  },
+  {
+    "id": 75,
+    "query": "Caída del Muro de Berlín"
+  },
+  {
+    "id": 76,
+    "query": "El sitio de Viena de 1683"
+  },
+  {
+    "id": 77,
+    "query": "La independencia de Malasia"
+  },
+  {
+    "id": 78,
+    "query": "Atentados del 11-S"
+  },
+  {
+    "id": 79,
+    "query": "La revolución de los Claveles en Portugal"
+  },
+  {
+    "id": 80,
+    "query": "El imperio de Gengis Kan"
+  },
+  {
+    "id": 81,
+    "query": "La independencia de Venezuela"
+  },
+  {
+    "id": 82,
+    "query": "La caída del Muro de Berlín"
+  },
+  {
+    "id": 83,
+    "query": "La caída de Constantinopla"
+  },
+  {
+    "id": 84,
+    "query": "La historia de la unión de Kalmar"
+  },
+  {
+    "id": 85,
+    "query": "Cazadores-recolectores"
+  },
+  {
+    "id": 86,
+    "query": "La historia de la Revolución Industrial"
+  },
+  {
+    "id": 87,
+    "query": "La colonización alemana en África"
+  },
+  {
+    "id": 88,
+    "query": "La reforma protestante"
+  },
+  {
+    "id": 89,
+    "query": "Leonardo da Vinci"
+  },
+  {
+    "id": 90,
+    "query": "El imperio de los Habsburgo"
+  },
+  {
+    "id": 91,
+    "query": "La batalla de Agincourt"
+  },
+  {
+    "id": 92,
+    "query": "La historia de la ONU y sus misiones de paz"
+  },
+  {
+    "id": 93,
+    "query": "Brexit"
+  },
+  {
+    "id": 94,
+    "query": "El sitio de Viena por los otomanos"
+  },
+  {
+    "id": 95,
+    "query": "El tratado de Waitangi"
+  },
+  {
+    "id": 96,
+    "query": "Averroes"
+  },
+  {
+    "id": 97,
+    "query": "El Tratado de Trianon"
+  },
+  {
+    "id": 98,
+    "query": "El papel de Simón Bolívar en Sudamérica"
+  },
+  {
+    "id": 99,
+    "query": "El genocidio en Camboya"
+  },
+  {
+    "id": 100,
+    "query": "La revolución tecnológica del siglo XX"
+  },
+  {
+    "id": 101,
+    "query": "El conflicto de Darfur"
+  },
+  {
+    "id": 102,
+    "query": "La política de apartheid en Sudáfrica"
+  },
+  {
+    "id": 103,
+    "query": "El rol de las Naciones Unidas en Ruanda"
+  },
+  {
+    "id": 104,
+    "query": "El tratado de Portsmouth"
+  },
+  {
+    "id": 105,
+    "query": "El tratado de Westfalia"
+  },
+  {
+    "id": 106,
+    "query": "El Congreso de Tucumán"
+  },
+  {
+    "id": 107,
+    "query": "El rol de la iglesia ortodoxa en Europa del Este"
+  },
+  {
+    "id": 108,
+    "query": "La historia del Imperio Khmer"
+  },
+  {
+    "id": 109,
+    "query": "El imperio de Napoleón Bonaparte"
+  },
+  {
+    "id": 110,
+    "query": "Imperio Bizantino"
+  },
+  {
+    "id": 111,
+    "query": "La guerra Franco-Prusiana"
+  },
+  {
+    "id": 112,
+    "query": "La invasión mongola de Europa"
+  },
+  {
+    "id": 113,
+    "query": "La reforma agraria en China"
+  },
+  {
+    "id": 114,
+    "query": "La guerra de las Malvinas"
+  },
+  {
+    "id": 115,
+    "query": "La Revolución Meiji en Japón"
+  },
+  {
+    "id": 116,
+    "query": "Guerra de los Cien Años"
+  },
+  {
+    "id": 117,
+    "query": "La unificación de Alemania"
+  },
+  {
+    "id": 118,
+    "query": "La historia del Imperio Parto"
+  },
+  {
+    "id": 119,
+    "query": "La independencia de las colonias africanas"
+  },
+  {
+    "id": 120,
+    "query": "La batalla de Zama"
+  },
+  {
+    "id": 121,
+    "query": "La migración masiva durante la partición de India"
+  },
+  {
+    "id": 122,
+    "query": "La guerra de Independencia de Filipinas"
+  },
+  {
+    "id": 123,
+    "query": "Confucio"
+  },
+  {
+    "id": 124,
+    "query": "El conflicto de Timor Oriental"
+  },
+  {
+    "id": 125,
+    "query": "La historia de la dinastía Abbasí"
+  },
+  {
+    "id": 126,
+    "query": "La colonización de Australia"
+  },
+  {
+    "id": 127,
+    "query": "El impacto del imperialismo francés en África"
+  },
+  {
+    "id": 128,
+    "query": "El genocidio en Bosnia"
+  },
+  {
+    "id": 129,
+    "query": "Domesticación de animales"
+  },
+  {
+    "id": 130,
+    "query": "La guerra civil griega"
+  },
+  {
+    "id": 131,
+    "query": "El conflicto entre Serbia y Kosovo"
+  },
+  {
+    "id": 132,
+    "query": "El tratado de Versalles"
+  },
+  {
+    "id": 133,
+    "query": "El ascenso del nazismo en Europa"
+  },
+  {
+    "id": 134,
+    "query": "Descubrimiento del fuego"
+  },
+  {
+    "id": 135,
+    "query": "La historia del imperio Nabateo"
+  },
+  {
+    "id": 136,
+    "query": "La historia del ascenso de China como potencia global"
+  },
+  {
+    "id": 137,
+    "query": "La historia del imperio español"
+  },
+  {
+    "id": 138,
+    "query": "La rebelión de los esclavos de Espartaco"
+  },
+  {
+    "id": 139,
+    "query": "La historia de la revolución tecnológica del siglo XXI"
+  },
+  {
+    "id": 140,
+    "query": "Carlomagno"
+  },
+  {
+    "id": 141,
+    "query": "La guerra del Yom Kipur"
+  },
+  {
+    "id": 142,
+    "query": "La historia de las civilizaciones andinas"
+  },
+  {
+    "id": 143,
+    "query": "La Compañía de las Indias Orientales"
+  },
+  {
+    "id": 144,
+    "query": "La historia del imperio Maurya"
+  },
+  {
+    "id": 145,
+    "query": "Batalla de Hastings"
+  },
+  {
+    "id": 146,
+    "query": "El rol de los kurdos en Medio Oriente"
+  },
+  {
+    "id": 147,
+    "query": "Casa de los Habsburgo"
+  },
+  {
+    "id": 148,
+    "query": "La batalla de Tours"
+  },
+  {
+    "id": 149,
+    "query": "La expansión vikinga en Groenlandia"
+  },
+  {
+    "id": 150,
+    "query": "La revolución sandinista"
+  },
+  {
+    "id": 151,
+    "query": "El tratado de Utrecht"
+  },
+  {
+    "id": 152,
+    "query": "La revolución de Mayo en Argentina"
+  },
+  {
+    "id": 153,
+    "query": "La Edad de Bronce"
+  },
+  {
+    "id": 154,
+    "query": "La guerra civil española"
+  },
+  {
+    "id": 155,
+    "query": "La historia de la migración masiva en Europa"
+  },
+  {
+    "id": 156,
+    "query": "Tomas de Aquino"
+  },
+  {
+    "id": 157,
+    "query": "El ascenso de la burguesía en Europa"
+  },
+  {
+    "id": 158,
+    "query": "La guerra de los Boers"
+  },
+  {
+    "id": 159,
+    "query": "Nacimiento de Roma"
+  },
+  {
+    "id": 160,
+    "query": "La guerra de los seis días"
+  },
+  {
+    "id": 161,
+    "query": "Caída del Imperio Romano"
+  },
+  {
+    "id": 162,
+    "query": "La historia del califato Abasí"
+  },
+  {
+    "id": 163,
+    "query": "La historia del Imperio Bizantino"
+  },
+  {
+    "id": 164,
+    "query": "Redes sociales en política"
+  },
+  {
+    "id": 165,
+    "query": "El mecenazgo en el Renacimiento"
+  },
+  {
+    "id": 166,
+    "query": "El conflicto rohingya"
+  },
+  {
+    "id": 167,
+    "query": "La revolución de 1905 en Rusia"
+  },
+  {
+    "id": 168,
+    "query": "La independencia de Eritrea"
+  },
+  {
+    "id": 169,
+    "query": "La guerra civil en Sri Lanka"
+  },
+  {
+    "id": 170,
+    "query": "La revolución cubana"
+  },
+  {
+    "id": 171,
+    "query": "La Guerra de Independencia de Grecia"
+  },
+  {
+    "id": 172,
+    "query": "La historia de la imprenta"
+  },
+  {
+    "id": 173,
+    "query": "Pandemia de COVID-19"
+  },
+  {
+    "id": 174,
+    "query": "La historia de la dinastía Merovingia"
+  },
+  {
+    "id": 175,
+    "query": "La historia del Imperio Seléucida"
+  },
+  {
+    "id": 176,
+    "query": "Universidades medievales"
+  },
+  {
+    "id": 177,
+    "query": "El Código de Hammurabi"
+  },
+  {
+    "id": 178,
+    "query": "El nacimiento de la escritura"
+  },
+  {
+    "id": 179,
+    "query": "El movimiento hippie"
+  },
+  {
+    "id": 180,
+    "query": "Imperio Carolingio"
+  },
+  {
+    "id": 181,
+    "query": "El movimiento sufragista femenino"
+  },
+  {
+    "id": 182,
+    "query": "La historia de los maroon en Jamaica"
+  },
+  {
+    "id": 183,
+    "query": "La historia del Imperio Austrohúngaro"
+  },
+  {
+    "id": 184,
+    "query": "La Guerra Italo-Turca"
+  },
+  {
+    "id": 185,
+    "query": "El papel de la mujer en la Primera Guerra Mundial"
+  },
+  {
+    "id": 186,
+    "query": "El descubrimiento de la penicilina"
+  },
+  {
+    "id": 187,
+    "query": "Greta Thunberg"
+  },
+  {
+    "id": 188,
+    "query": "La Guerra del Peloponeso"
+  },
+  {
+    "id": 189,
+    "query": "El desarrollo del comercio en la Ruta de la Seda"
+  },
+  {
+    "id": 190,
+    "query": "La revolución de los paraguas en Hong Kong"
+  },
+  {
+    "id": 191,
+    "query": "El edicto de Milán"
+  },
+  {
+    "id": 192,
+    "query": "Segunda Guerra Mundial"
+  },
+  {
+    "id": 193,
+    "query": "La historia del Tibet bajo dominio chino"
+  },
+  {
+    "id": 194,
+    "query": "El proceso de unificación alemana"
+  },
+  {
+    "id": 195,
+    "query": "Conquista del Perú"
+  },
+  {
+    "id": 196,
+    "query": "La historia del imperio Hitita"
+  },
+  {
+    "id": 197,
+    "query": "La batalla de Puebla"
+  },
+  {
+    "id": 198,
+    "query": "Descolonización de África"
+  },
+  {
+    "id": 199,
+    "query": "Lucy (Australopithecus)"
+  },
+  {
+    "id": 200,
+    "query": "Aristóteles"
+  },
+  {
+    "id": 201,
+    "query": "La batalla de Stalingrado"
+  },
+  {
+    "id": 202,
+    "query": "Elección de Barack Obama"
+  },
+  {
+    "id": 203,
+    "query": "El auge de la Liga de las Naciones"
+  },
+  {
+    "id": 204,
+    "query": "La historia del imperio de Benín"
+  },
+  {
+    "id": 205,
+    "query": "La guerra de independencia de Argelia"
+  },
+  {
+    "id": 206,
+    "query": "La batalla de Waterloo"
+  },
+  {
+    "id": 207,
+    "query": "La crisis del petróleo de 1973"
+  },
+  {
+    "id": 208,
+    "query": "El impacto de la peste de Justiniano"
+  },
+  {
+    "id": 209,
+    "query": "Cultura Clovis"
+  },
+  {
+    "id": 210,
+    "query": "La historia de los mongoles"
+  },
+  {
+    "id": 211,
+    "query": "El auge del Imperio Otomano"
+  },
+  {
+    "id": 212,
+    "query": "La independencia de Angola"
+  },
+  {
+    "id": 213,
+    "query": "La guerra civil estadounidense"
+  },
+  {
+    "id": 214,
+    "query": "Hombre de Neandertal"
+  },
+  {
+    "id": 215,
+    "query": "Cisma de Oriente"
+  },
+  {
+    "id": 216,
+    "query": "La revolución verde en India"
+  },
+  {
+    "id": 217,
+    "query": "La guerra de los 100 años"
+  },
+  {
+    "id": 218,
+    "query": "La historia del conflicto checheno"
+  },
+  {
+    "id": 219,
+    "query": "La guerra de secesión de Sudán"
+  },
+  {
+    "id": 220,
+    "query": "La formación del bloque del Este"
+  },
+  {
+    "id": 221,
+    "query": "Karl Marx"
+  },
+  {
+    "id": 222,
+    "query": "El papel de las mujeres en la Revolución Mexicana"
+  },
+  {
+    "id": 223,
+    "query": "La guerra de sucesión española"
+  },
+  {
+    "id": 224,
+    "query": "La historia del movimiento hippie"
+  },
+  {
+    "id": 225,
+    "query": "La historia de los fenicios"
+  },
+  {
+    "id": 226,
+    "query": "La rebelión de los bóxers"
+  },
+  {
+    "id": 227,
+    "query": "El manifiesto comunista"
+  },
+  {
+    "id": 228,
+    "query": "Torre de Babel"
+  },
+  {
+    "id": 229,
+    "query": "La revolución de terciopelo en Checoslovaquia"
+  },
+  {
+    "id": 230,
+    "query": "El protectorado británico en Egipto"
+  },
+  {
+    "id": 231,
+    "query": "El tratado de Guadalupe Hidalgo"
+  },
+  {
+    "id": 232,
+    "query": "La historia de los Mayas"
+  },
+  {
+    "id": 233,
+    "query": "La formación de la OTAN"
+  },
+  {
+    "id": 234,
+    "query": "El impacto del oro en la colonización americana"
+  },
+  {
+    "id": 235,
+    "query": "El conflicto en Nagorno Karabaj"
+  },
+  {
+    "id": 236,
+    "query": "La historia de la emancipación de América Latina"
+  },
+  {
+    "id": 237,
+    "query": "La guerra del Cenepa"
+  },
+  {
+    "id": 238,
+    "query": "La Guerra de Secesión en Estados Unidos"
+  },
+  {
+    "id": 239,
+    "query": "El conflicto en Yemen"
+  },
+  {
+    "id": 240,
+    "query": "La revolución iraní de 1979"
+  },
+  {
+    "id": 241,
+    "query": "El auge del nazismo en Alemania"
+  },
+  {
+    "id": 242,
+    "query": "El absolutismo monárquico"
+  },
+  {
+    "id": 243,
+    "query": "La guerra de las rosas"
+  },
+  {
+    "id": 244,
+    "query": "La historia del canal de Suez"
+  },
+  {
+    "id": 245,
+    "query": "El desarrollo del parlamentarismo británico"
+  },
+  {
+    "id": 246,
+    "query": "Che Guevara"
+  },
+  {
+    "id": 247,
+    "query": "La guerra en Afganistán"
+  },
+  {
+    "id": 248,
+    "query": "La batalla de Kadesh"
+  },
+  {
+    "id": 249,
+    "query": "La historia del Tíbet bajo el dominio chino"
+  },
+  {
+    "id": 250,
+    "query": "El caso Dreyfus"
+  },
+  {
+    "id": 251,
+    "query": "Herramientas de piedra del Paleolítico"
+  },
+  {
+    "id": 252,
+    "query": "La disolución de Checoslovaquia"
+  },
+  {
+    "id": 253,
+    "query": "La historia de la orden de los Jesuitas"
+  },
+  {
+    "id": 254,
+    "query": "La Guerra del Golfo"
+  },
+  {
+    "id": 255,
+    "query": "El genocidio de Darfur"
+  },
+  {
+    "id": 256,
+    "query": "La historia de los Acuerdos de Oslo"
+  },
+  {
+    "id": 257,
+    "query": "La civilización etrusca"
+  },
+  {
+    "id": 258,
+    "query": "La política del Big Stick"
+  },
+  {
+    "id": 259,
+    "query": "Reforma protestante"
+  },
+  {
+    "id": 260,
+    "query": "Primera Guerra Mundial"
+  },
+  {
+    "id": 261,
+    "query": "Benito Mussolini"
+  },
+  {
+    "id": 262,
+    "query": "El tratado de Campo Formio"
+  },
+  {
+    "id": 263,
+    "query": "Plan Marshall"
+  },
+  {
+    "id": 264,
+    "query": "El surgimiento del feminismo"
+  },
+  {
+    "id": 265,
+    "query": "El movimiento zapatista en México"
+  },
+  {
+    "id": 266,
+    "query": "Persas"
+  },
+  {
+    "id": 267,
+    "query": "La creación del Mercosur"
+  },
+  {
+    "id": 268,
+    "query": "La Conferencia de Berlín de 1884"
+  },
+  {
+    "id": 269,
+    "query": "El conflicto del Sahara Occidental"
+  },
+  {
+    "id": 270,
+    "query": "La unificación del Reino de Italia"
+  },
+  {
+    "id": 271,
+    "query": "La creación del Estado de Israel"
+  },
+  {
+    "id": 272,
+    "query": "La historia del genocidio de Ruanda"
+  },
+  {
+    "id": 273,
+    "query": "La batalla de Dien Bien Phu"
+  },
+  {
+    "id": 274,
+    "query": "La historia de los godos"
+  },
+  {
+    "id": 275,
+    "query": "La creación del Movimiento de Países No Alineados"
+  },
+  {
+    "id": 276,
+    "query": "Guerras Púnicas"
+  },
+  {
+    "id": 277,
+    "query": "La guerra del Paraguay"
+  },
+  {
+    "id": 278,
+    "query": "Las guerras púnicas"
+  },
+  {
+    "id": 279,
+    "query": "La historia del Imperio Ashoka"
+  },
+  {
+    "id": 280,
+    "query": "La historia del imperialismo japonés"
+  },
+  {
+    "id": 281,
+    "query": "La peste negra en Europa"
+  },
+  {
+    "id": 282,
+    "query": "El surgimiento del nacionalismo en Europa"
+  },
+  {
+    "id": 283,
+    "query": "La rebelión de Espartaco"
+  },
+  {
+    "id": 284,
+    "query": "Asirios"
+  },
+  {
+    "id": 285,
+    "query": "Mesopotamia"
+  },
+  {
+    "id": 286,
+    "query": "Templarios"
+  },
+  {
+    "id": 287,
+    "query": "El movimiento estudiantil de 1968"
+  },
+  {
+    "id": 288,
+    "query": "La guerra entre Etiopía y Somalia"
+  },
+  {
+    "id": 289,
+    "query": "El imperio Maurya"
+  },
+  {
+    "id": 290,
+    "query": "La historia de la Guerra de Irak"
+  },
+  {
+    "id": 291,
+    "query": "El imperio de los Hititas"
+  },
+  {
+    "id": 292,
+    "query": "La independencia de Haití"
+  },
+  {
+    "id": 293,
+    "query": "Guerra de Vietnam"
+  },
+  {
+    "id": 294,
+    "query": "La expedición de Lewis y Clark"
+  },
+  {
+    "id": 295,
+    "query": "El conflicto del mar del Sur de China"
+  },
+  {
+    "id": 296,
+    "query": "El imperio de los Gupta"
+  },
+  {
+    "id": 297,
+    "query": "El ascenso del comunismo"
+  },
+  {
+    "id": 298,
+    "query": "La historia de la Liga Hanseática"
+  },
+  {
+    "id": 299,
+    "query": "La crisis de Suez de 1956"
+  },
+  {
+    "id": 300,
+    "query": "La historia del conflicto del Alto Karabaj"
+  },
+  {
+    "id": 301,
+    "query": "La vida de Cleopatra"
+  },
+  {
+    "id": 302,
+    "query": "La expansión del cristianismo"
+  },
+  {
+    "id": 303,
+    "query": "Crisis económica de 2008"
+  },
+  {
+    "id": 304,
+    "query": "La revuelta de Espartaco"
+  },
+  {
+    "id": 305,
+    "query": "Tratado de Westfalia"
+  },
+  {
+    "id": 306,
+    "query": "La guerra anglo-zulú"
+  },
+  {
+    "id": 307,
+    "query": "La historia de la independencia de Filipinas"
+  },
+  {
+    "id": 308,
+    "query": "La revolución naranja en Ucrania"
+  },
+  {
+    "id": 309,
+    "query": "La revolución cultural china"
+  },
+  {
+    "id": 310,
+    "query": "La intervención soviética en Afganistán"
+  },
+  {
+    "id": 311,
+    "query": "La rebelión de esclavos en Haití"
+  },
+  {
+    "id": 312,
+    "query": "La guerra de Crimea"
+  },
+  {
+    "id": 313,
+    "query": "La guerra de los pasteles"
+  },
+  {
+    "id": 314,
+    "query": "El edicto de Nantes"
+  },
+  {
+    "id": 315,
+    "query": "La guerra de Abisinia"
+  },
+  {
+    "id": 316,
+    "query": "Los vikingos y sus exploraciones"
+  },
+  {
+    "id": 317,
+    "query": "La dinastía Ptolemaica en Egipto"
+  },
+  {
+    "id": 318,
+    "query": "La independencia de Argelia"
+  },
+  {
+    "id": 319,
+    "query": "Napoleón Bonaparte"
+  },
+  {
+    "id": 320,
+    "query": "La rebelión de Taiping"
+  },
+  {
+    "id": 321,
+    "query": "Desigualdad económica global"
+  },
+  {
+    "id": 322,
+    "query": "La historia de la OPEP"
+  },
+  {
+    "id": 323,
+    "query": "El movimiento panarabista"
+  },
+  {
+    "id": 324,
+    "query": "La expansión del islam en la Edad Media"
+  },
+  {
+    "id": 325,
+    "query": "La crisis de los misiles en Cuba"
+  },
+  {
+    "id": 326,
+    "query": "La liga de Naciones"
+  },
+  {
+    "id": 327,
+    "query": "La vida de Juana de Arco"
+  },
+  {
+    "id": 328,
+    "query": "El papel de la mujer en la Revolución Francesa"
+  },
+  {
+    "id": 329,
+    "query": "El proceso de independencia de Canadá"
+  },
+  {
+    "id": 330,
+    "query": "El tratado de Tordesillas"
+  },
+  {
+    "id": 331,
+    "query": "La historia de la Unión Europea"
+  },
+  {
+    "id": 332,
+    "query": "La historia de la URSS"
+  },
+  {
+    "id": 333,
+    "query": "Isaac Newton"
+  },
+  {
+    "id": 334,
+    "query": "El Imperio Songhai"
+  },
+  {
+    "id": 335,
+    "query": "La historia del imperio persa"
+  },
+  {
+    "id": 336,
+    "query": "Revolución Neolítica"
+  },
+  {
+    "id": 337,
+    "query": "La rebelión de los bóxers en China"
+  },
+  {
+    "id": 338,
+    "query": "La historia de la Primavera Árabe"
+  },
+  {
+    "id": 339,
+    "query": "Las Cruzadas"
+  },
+  {
+    "id": 340,
+    "query": "La independencia de Ghana"
+  },
+  {
+    "id": 341,
+    "query": "La formación del imperio búlgaro"
+  },
+  {
+    "id": 342,
+    "query": "El régimen de Pol Pot en Camboya"
+  },
+  {
+    "id": 343,
+    "query": "La guerra ruso-japonesa"
+  },
+  {
+    "id": 344,
+    "query": "La batalla de Kosovo (1389)"
+  },
+  {
+    "id": 345,
+    "query": "El código napoleónico"
+  },
+  {
+    "id": 346,
+    "query": "Revolución Industrial"
+  },
+  {
+    "id": 347,
+    "query": "La dinastía Qing en China"
+  },
+  {
+    "id": 348,
+    "query": "Revolución científica"
+  },
+  {
+    "id": 349,
+    "query": "Revolución Francesa"
+  },
+  {
+    "id": 350,
+    "query": "La influencia cultural del imperio sasánida"
+  },
+  {
+    "id": 351,
+    "query": "La dinastía Han"
+  },
+  {
+    "id": 352,
+    "query": "La historia de la Comuna de París"
+  },
+  {
+    "id": 353,
+    "query": "La historia de los celtas"
+  },
+  {
+    "id": 354,
+    "query": "La historia de los etruscos"
+  },
+  {
+    "id": 355,
+    "query": "La historia de la expansión de la Unión Europea"
+  },
+  {
+    "id": 356,
+    "query": "El apartheid en Namibia"
+  },
+  {
+    "id": 357,
+    "query": "La guerra de los campesinos en Alemania"
+  },
+  {
+    "id": 358,
+    "query": "Pirámides de Egipto"
+  },
+  {
+    "id": 359,
+    "query": "La caída del Imperio Romano de Occidente"
+  },
+  {
+    "id": 360,
+    "query": "La historia del Sacro Imperio Romano Germánico"
+  },
+  {
+    "id": 361,
+    "query": "La historia del imperio Srivijaya"
+  },
+  {
+    "id": 362,
+    "query": "La historia de los almohades"
+  },
+  {
+    "id": 363,
+    "query": "El fin del colonialismo europeo"
+  },
+  {
+    "id": 364,
+    "query": "El apartheid en Sudáfrica"
+  },
+  {
+    "id": 365,
+    "query": "El Holocausto"
+  },
+  {
+    "id": 366,
+    "query": "La unificación de Italia"
+  },
+  {
+    "id": 367,
+    "query": "La Revolución Gloriosa en Inglaterra"
+  },
+  {
+    "id": 368,
+    "query": "La biblioteca de Alejandría"
+  },
+  {
+    "id": 369,
+    "query": "La batalla de Hastings"
+  },
+  {
+    "id": 370,
+    "query": "La historia del Tratado de Maastricht"
+  },
+  {
+    "id": 371,
+    "query": "La caída del régimen talibán en Afganistán"
+  },
+  {
+    "id": 372,
+    "query": "Crisis de refugiados"
+  },
+  {
+    "id": 373,
+    "query": "La guerra entre Irán e Irak"
+  },
+  {
+    "id": 374,
+    "query": "Coloso de Rodas"
+  },
+  {
+    "id": 375,
+    "query": "El conflicto de Cachemira"
+  },
+  {
+    "id": 376,
+    "query": "La guerra de Corea"
+  },
+  {
+    "id": 377,
+    "query": "La independencia de Mozambique"
+  },
+  {
+    "id": 378,
+    "query": "La historia de la cooperación internacional post Segunda Guerra Mundial"
+  },
+  {
+    "id": 379,
+    "query": "Tales de Mileto"
+  },
+  {
+    "id": 380,
+    "query": "La historia del conflicto israelí-libanés"
+  },
+  {
+    "id": 381,
+    "query": "La historia de los incas"
+  },
+  {
+    "id": 382,
+    "query": "La historia de la guerra fría en América Latina"
+  },
+  {
+    "id": 383,
+    "query": "El Renacimiento italiano"
+  },
+  {
+    "id": 384,
+    "query": "La revuelta de los esclavos en Haití"
+  },
+  {
+    "id": 385,
+    "query": "Tecnologías disruptivas"
+  },
+  {
+    "id": 386,
+    "query": "La Guerra del Opio"
+  },
+  {
+    "id": 387,
+    "query": "La historia del imperio Zulu"
+  },
+  {
+    "id": 388,
+    "query": "Movimiento sufragista"
+  },
+  {
+    "id": 389,
+    "query": "Feudalismo"
+  },
+  {
+    "id": 390,
+    "query": "La historia de los hunos"
+  },
+  {
+    "id": 391,
+    "query": "Barroco"
+  },
+  {
+    "id": 392,
+    "query": "La historia del apartheid en Namibia"
+  },
+  {
+    "id": 393,
+    "query": "La guerra civil en Siria"
+  },
+  {
+    "id": 394,
+    "query": "TikTok y su impacto sociocultural"
+  },
+  {
+    "id": 395,
+    "query": "El tratado de San Stefano"
+  },
+  {
+    "id": 396,
+    "query": "El Congreso de Viena"
+  },
+  {
+    "id": 397,
+    "query": "La historia de la independencia de Sudán del Sur"
+  },
+  {
+    "id": 398,
+    "query": "La batalla de Adrianópolis"
+  },
+  {
+    "id": 399,
+    "query": "El Tratado de Nanking"
+  },
+  {
+    "id": 400,
+    "query": "La influencia del imperio veneciano"
+  },
+  {
+    "id": 401,
+    "query": "El proceso de independencia de Mozambique"
+  },
+  {
+    "id": 402,
+    "query": "Ruta de la Seda"
+  },
+  {
+    "id": 403,
+    "query": "La guerra civil en Liberia"
+  },
+  {
+    "id": 404,
+    "query": "Pinturas rupestres de Altamira"
+  },
+  {
+    "id": 405,
+    "query": "La Confederación Germánica"
+  },
+  {
+    "id": 406,
+    "query": "La cultura olmeca"
+  },
+  {
+    "id": 407,
+    "query": "El nacimiento del capitalismo"
+  },
+  {
+    "id": 408,
+    "query": "La caída del Imperio Sasánida"
+  },
+  {
+    "id": 409,
+    "query": "El descubrimiento de América por Cristóbal Colón"
+  },
+  {
+    "id": 410,
+    "query": "La Primera Guerra Mundial"
+  },
+  {
+    "id": 411,
+    "query": "La historia de la Conferencia de Bandung"
+  },
+  {
+    "id": 412,
+    "query": "La guerra de los Nueve Años"
+  },
+  {
+    "id": 413,
+    "query": "La fundación de Cartago"
+  },
+  {
+    "id": 414,
+    "query": "La batalla de Rorke's Drift"
+  },
+  {
+    "id": 415,
+    "query": "Revolución digital"
+  },
+  {
+    "id": 416,
+    "query": "Enrique VIII"
+  },
+  {
+    "id": 417,
+    "query": "El conflicto del Tíbet"
+  },
+  {
+    "id": 418,
+    "query": "La revuelta de los campesinos en Alemania"
+  },
+  {
+    "id": 419,
+    "query": "La rebelión Taiping"
+  },
+  {
+    "id": 420,
+    "query": "Primavera Árabe"
+  },
+  {
+    "id": 421,
+    "query": "La historia de los Médici"
+  },
+  {
+    "id": 422,
+    "query": "Invasiones vikingas"
+  },
+  {
+    "id": 423,
+    "query": "Cumbre del G20"
+  },
+  {
+    "id": 424,
+    "query": "La guerra del Congo"
+  },
+  {
+    "id": 425,
+    "query": "La historia del imperio Kanem-Bornu"
+  },
+  {
+    "id": 426,
+    "query": "El conflicto Israel-Palestina"
+  },
+  {
+    "id": 427,
+    "query": "La crisis del Canal de Panamá"
+  },
+  {
+    "id": 428,
+    "query": "Juana de Arco"
+  },
+  {
+    "id": 429,
+    "query": "El impacto de la peste antonina"
+  },
+  {
+    "id": 430,
+    "query": "El tratado de San Ildefonso"
+  },
+  {
+    "id": 431,
+    "query": "Francisco Pizarro"
+  },
+  {
+    "id": 432,
+    "query": "La historia del imperio de Axum"
+  },
+  {
+    "id": 433,
+    "query": "El proceso de paz en Irlanda del Norte"
+  },
+  {
+    "id": 434,
+    "query": "Acuerdo de París"
+  },
+  {
+    "id": 435,
+    "query": "La revuelta de Varsovia"
+  },
+  {
+    "id": 436,
+    "query": "La colonización francesa en Indochina"
+  },
+  {
+    "id": 437,
+    "query": "Martín Lutero"
+  },
+  {
+    "id": 438,
+    "query": "La conquista normanda de Inglaterra"
+  },
+  {
+    "id": 439,
+    "query": "La guerra civil china"
+  },
+  {
+    "id": 440,
+    "query": "La historia del ferrocarril transiberiano"
+  },
+  {
+    "id": 441,
+    "query": "La Guerra de los Siete Años"
+  },
+  {
+    "id": 442,
+    "query": "El papel del petróleo en las guerras del siglo XX"
+  },
+  {
+    "id": 443,
+    "query": "La independencia de Zambia"
+  },
+  {
+    "id": 444,
+    "query": "La historia de la caída del apartheid"
+  },
+  {
+    "id": 445,
+    "query": "La guerra civil de Angola"
+  },
+  {
+    "id": 446,
+    "query": "Sumerios"
+  },
+  {
+    "id": 447,
+    "query": "El renacimiento carolingio"
+  },
+  {
+    "id": 448,
+    "query": "La guerra de los 30 años"
+  },
+  {
+    "id": 449,
+    "query": "Cristóbal Colón"
+  },
+  {
+    "id": 450,
+    "query": "El tratado de Brest-Litovsk"
+  },
+  {
+    "id": 451,
+    "query": "La caída del Imperio Romano de Oriente"
+  },
+  {
+    "id": 452,
+    "query": "La historia de los pueblos nómadas en Asia Central"
+  },
+  {
+    "id": 453,
+    "query": "La guerra de independencia de Angola"
+  },
+  {
+    "id": 454,
+    "query": "ONU"
+  },
+  {
+    "id": 455,
+    "query": "La historia del canal de Panamá"
+  },
+  {
+    "id": 456,
+    "query": "La independencia de Zimbabue"
+  },
+  {
+    "id": 457,
+    "query": "La historia de los cruzados"
+  },
+  {
+    "id": 458,
+    "query": "El ascenso del fascismo en Italia"
+  },
+  {
+    "id": 459,
+    "query": "La historia del Imperio Ruso"
+  },
+  {
+    "id": 460,
+    "query": "Democracia ateniense"
+  },
+  {
+    "id": 461,
+    "query": "La conquista del Perú"
+  },
+  {
+    "id": 462,
+    "query": "La batalla del Somme"
+  },
+  {
+    "id": 463,
+    "query": "Revolución Rusa"
+  },
+  {
+    "id": 464,
+    "query": "La historia del Imperio de Ghana"
+  },
+  {
+    "id": 465,
+    "query": "Tratado de Versalles"
+  },
+  {
+    "id": 466,
+    "query": "Cambio climático"
+  },
+  {
+    "id": 467,
+    "query": "Al-Ándalus"
+  },
+  {
+    "id": 468,
+    "query": "La creación del internet"
+  },
+  {
+    "id": 469,
+    "query": "Holocausto"
+  },
+  {
+    "id": 470,
+    "query": "La historia del Telón de Acero"
+  },
+  {
+    "id": 471,
+    "query": "La caída de Saigón"
+  },
+  {
+    "id": 472,
+    "query": "La guerra civil nigeriana"
+  },
+  {
+    "id": 473,
+    "query": "Dolmen de Menga"
+  },
+  {
+    "id": 474,
+    "query": "La historia del movimiento de los no alineados"
+  },
+  {
+    "id": 475,
+    "query": "La historia del Imperio Mali"
+  },
+  {
+    "id": 476,
+    "query": "Gengis Kan"
+  },
+  {
+    "id": 477,
+    "query": "Desinformación digital"
+  },
+  {
+    "id": 478,
+    "query": "La batalla de Teutoburgo"
+  },
+  {
+    "id": 479,
+    "query": "Guerra de los Treinta Años"
+  },
+  {
+    "id": 480,
+    "query": "La declaración Balfour"
+  },
+  {
+    "id": 481,
+    "query": "La revolución rusa de 1917"
+  },
+  {
+    "id": 482,
+    "query": "La guerra de independencia de Bangladesh"
+  },
+  {
+    "id": 483,
+    "query": "La independencia de la India"
+  },
+  {
+    "id": 484,
+    "query": "La caída del Imperio Otomano"
+  },
+  {
+    "id": 485,
+    "query": "La guerra civil finlandesa"
+  },
+  {
+    "id": 486,
+    "query": "El desarrollo del canal de Suez"
+  },
+  {
+    "id": 487,
+    "query": "La caída del Imperio Mogol"
+  },
+  {
+    "id": 488,
+    "query": "Los tratados de paz de Osnabrück y Münster"
+  },
+  {
+    "id": 489,
+    "query": "Peste Negra"
+  },
+  {
+    "id": 490,
+    "query": "El concilio de Trento"
+  },
+  {
+    "id": 491,
+    "query": "La creación del euro"
+  },
+  {
+    "id": 492,
+    "query": "El reinado de Ramsés II"
+  },
+  {
+    "id": 493,
+    "query": "Los antiguos reinos de Nubia"
+  },
+  {
+    "id": 494,
+    "query": "La civilización minoica en Creta"
+  },
+  {
+    "id": 495,
+    "query": "La rebelión Taiping en China"
+  },
+  {
+    "id": 496,
+    "query": "La vida de Ramsés II"
+  },
+  {
+    "id": 497,
+    "query": "La dinastía Gupta en la India"
+  },
+  {
+    "id": 498,
+    "query": "El Imperio Kanem-Bornu"
+  },
+  {
+    "id": 499,
+    "query": "Las Guerras de Independencia en América Latina"
+  },
+  {
+    "id": 500,
+    "query": "El rol de la mujer en la Revolución Francesa"
+  },
+  {
+    "id": 501,
+    "query": "La historia de la República de Weimar"
+  },
+  {
+    "id": 502,
+    "query": "El Imperio Acadio"
+  },
+  {
+    "id": 503,
+    "query": "La Revolución haitiana"
+  },
+  {
+    "id": 504,
+    "query": "Los Incas antes de la llegada de los españoles"
+  },
+  {
+    "id": 505,
+    "query": "El Imperio Bizantino bajo Justiniano"
+  },
+  {
+    "id": 506,
+    "query": "La guerra del Chaco"
+  },
+  {
+    "id": 507,
+    "query": "La historia del Imperio Huno"
+  },
+  {
+    "id": 508,
+    "query": "La historia del Congo belga"
+  },
+  {
+    "id": 509,
+    "query": "La revolución rusa de 1905"
+  },
+  {
+    "id": 510,
+    "query": "La cultura etrusca"
+  },
+  {
+    "id": 511,
+    "query": "Las guerras de religión en Francia"
+  },
+  {
+    "id": 512,
+    "query": "La historia de Angkor Wat"
+  },
+  {
+    "id": 513,
+    "query": "El desarrollo del código de Hammurabi"
+  },
+  {
+    "id": 514,
+    "query": "La historia de los samuráis en Japón"
+  },
+  {
+    "id": 515,
+    "query": "Los tratados de Westfalia"
+  },
+  {
+    "id": 516,
+    "query": "El califato abasí"
+  },
+  {
+    "id": 517,
+    "query": "La historia del Imperio Otomano en los Balcanes"
+  },
+  {
+    "id": 518,
+    "query": "Los exploradores portugueses en África"
+  },
+  {
+    "id": 519,
+    "query": "La guerra del opio"
+  },
+  {
+    "id": 520,
+    "query": "El ascenso de Benito Mussolini"
+  },
+  {
+    "id": 521,
+    "query": "El conflicto entre Israel y Palestina"
+  },
+  {
+    "id": 522,
+    "query": "El surgimiento del movimiento sionista"
+  },
+  {
+    "id": 523,
+    "query": "La construcción del Canal de Suez"
+  },
+  {
+    "id": 524,
+    "query": "El escándalo de Watergate"
+  },
+  {
+    "id": 525,
+    "query": "La historia de los kurdos"
+  },
+  {
+    "id": 526,
+    "query": "La caída del muro de Berlín"
+  },
+  {
+    "id": 527,
+    "query": "La historia de la Unión Africana"
+  },
+  {
+    "id": 528,
+    "query": "La independencia de Bangladesh"
+  },
+  {
+    "id": 529,
+    "query": "La guerra de secesión estadounidense"
+  },
+  {
+    "id": 530,
+    "query": "La fundación de Naciones Unidas"
+  },
+  {
+    "id": 531,
+    "query": "El movimiento por los derechos civiles en EE.UU."
+  },
+  {
+    "id": 532,
+    "query": "La guerra del Golfo Pérsico"
+  },
+  {
+    "id": 533,
+    "query": "El ascenso del Estado Islámico"
+  },
+  {
+    "id": 534,
+    "query": "La Primavera Árabe"
+  },
+  {
+    "id": 535,
+    "query": "La historia de la OTAN"
+  },
+  {
+    "id": 536,
+    "query": "El desarrollo del comunismo en China"
+  },
+  {
+    "id": 537,
+    "query": "La política de apartheid en Namibia"
+  },
+  {
+    "id": 538,
+    "query": "La historia de los Talibanes"
+  },
+  {
+    "id": 539,
+    "query": "Los Juicios de Núremberg"
+  },
+  {
+    "id": 540,
+    "query": "El desarrollo del proyecto Manhattan"
+  },
+  {
+    "id": 541,
+    "query": "La historia de la guerra de Corea"
+  },
+  {
+    "id": 542,
+    "query": "El papel de la URSS en la Segunda Guerra Mundial"
+  },
+  {
+    "id": 543,
+    "query": "El genocidio en Ruanda"
+  },
+  {
+    "id": 544,
+    "query": "La historia del Imperio Mongol"
+  },
+  {
+    "id": 545,
+    "query": "La vida de Mahatma Gandhi"
+  },
+  {
+    "id": 546,
+    "query": "La historia de la Alianza del Pacífico"
+  },
+  {
+    "id": 547,
+    "query": "Los Acuerdos de Oslo"
+  },
+  {
+    "id": 548,
+    "query": "La guerra Irán-Irak"
+  },
+  {
+    "id": 549,
+    "query": "El surgimiento del movimiento Black Lives Matter"
+  },
+  {
+    "id": 550,
+    "query": "La historia del voto femenino en América Latina"
+  },
+  {
+    "id": 551,
+    "query": "La historia del feminismo en Europa"
+  },
+  {
+    "id": 552,
+    "query": "La influencia de la Ilustración en América"
+  },
+  {
+    "id": 553,
+    "query": "La guerra de los Cien Años"
+  },
+  {
+    "id": 554,
+    "query": "Los tratados de Tlatelolco"
+  },
+  {
+    "id": 555,
+    "query": "La fundación del Imperio Carolingio"
+  },
+  {
+    "id": 556,
+    "query": "La historia del pueblo Mapuche"
+  },
+  {
+    "id": 557,
+    "query": "La independencia de Filipinas"
+  },
+  {
+    "id": 558,
+    "query": "La Revolución de los Claveles en Portugal"
+  },
+  {
+    "id": 559,
+    "query": "El conflicto de los Balcanes en los 90"
+  },
+  {
+    "id": 560,
+    "query": "La vida de Nelson Mandela"
+  },
+  {
+    "id": 561,
+    "query": "El golpe de Estado en Chile de 1973"
+  },
+  {
+    "id": 562,
+    "query": "La historia de la resistencia francesa"
+  },
+  {
+    "id": 563,
+    "query": "El movimiento hippie en los años 60"
+  },
+  {
+    "id": 564,
+    "query": "La guerra de Malvinas"
+  },
+  {
+    "id": 565,
+    "query": "La historia del Tercer Reich"
+  },
+  {
+    "id": 566,
+    "query": "El impacto del descubrimiento de América"
+  },
+  {
+    "id": 567,
+    "query": "Los vikingos en América"
+  },
+  {
+    "id": 568,
+    "query": "El cisma de Oriente"
+  },
+  {
+    "id": 569,
+    "query": "El desembarco de Normandía"
+  }
+]
