@@ -2,62 +2,74 @@ import os
 import sys
 import pickle
 import faiss
-import numpy as np
-from transformers import pipeline
-from sentence_transformers import SentenceTransformer
+import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer
 
-
+# Rutas base
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 VECTOR_STORE_DIR = os.path.join(BASE_DIR, "data", "vectorstore_faiss")
 FAISS_INDEX_PATH = os.path.join(VECTOR_STORE_DIR, "faiss_index.index")
 TEXTS_PATH = os.path.join(VECTOR_STORE_DIR, "texts.pkl")
+GEN_MODEL_PATH = os.path.join(BASE_DIR, "models", "tinyllama-1.1b-chat-v1.0")
 
-EMBEDDING_MODEL_PATH = os.path.join(BASE_DIR, "models", "all-mpnet-base-v2")
-QA_MODEL_PATH = os.path.join(BASE_DIR, "models", "bert-base-spanish-wwm-cased-finetuned-spa-squad2-es")
+# Parámetros
 TOP_K = 5
+MAX_TOKENS = 300  # Puedes ajustar este valor
 
-# Cargar índice y textos
+# Cargar FAISS
 print("📂 Cargando índice vectorial y textos...")
 index = faiss.read_index(FAISS_INDEX_PATH)
 with open(TEXTS_PATH, "rb") as f:
     texts = pickle.load(f)
 
-# Cargar modelos
-print("⚙️ Cargando modelos...")
-embedding_model = SentenceTransformer(EMBEDDING_MODEL_PATH)
-qa_pipeline = pipeline("question-answering", model=QA_MODEL_PATH, tokenizer=QA_MODEL_PATH)
-print("✅ Modelos listos.\n")
+# Cargar modelo generativo
+print("⚙️ Cargando modelo generativo...")
+tokenizer = AutoTokenizer.from_pretrained(GEN_MODEL_PATH)
+model = AutoModelForCausalLM.from_pretrained(GEN_MODEL_PATH)
+device = "cuda" if torch.cuda.is_available() else "cpu"
+model.to(device)
+print("✅ Modelo listo.\n")
 
-# Buscar contexto relevante
+# Modelo de embeddings
+from sentence_transformers import SentenceTransformer
+embedding_model = SentenceTransformer(os.path.join(BASE_DIR, "models", "all-mpnet-base-v2"))
+
+# Recuperar contexto
 def retrieve_context(query, k=TOP_K):
     query_vector = embedding_model.encode([query]).astype("float32")
-    query_vector /= np.linalg.norm(query_vector, axis=1, keepdims=True)
-    distances, indices = index.search(query_vector, k * 2)  # Recupera más para filtrar
+    query_vector /= (query_vector**2).sum(axis=1, keepdims=True)**0.5
+    distances, indices = index.search(query_vector, k)
 
-    top_chunks = [texts[i] for i in indices[0]]
+    chunks = [texts[i] for i in indices[0]]
+    print("\n🔎 Contexto recuperado:")
+    for i, (c, d) in enumerate(zip(chunks, distances[0]), 1):
+        print(f"\n--- Chunk {i} (distancia: {d:.4f}) ---\n{c[:400]}...\n")
+    return chunks
 
-    # Priorizamos los chunks cuyo título coincide con palabras clave en la pregunta
-    filtered = [t for t in top_chunks if any(w in t.lower() for w in query.lower().split())]
+# Construir prompt e inferir respuesta
+def generate_answer(question, context_chunks):
+    context = "\n".join(context_chunks[:TOP_K])
+    prompt = f"""Contesta la siguiente pregunta de historia usando la información provista.
 
-    # Si encontramos al menos k relevantes, usamos esos
-    if len(filtered) >= k:
-        return filtered[:k]
+### Contexto:
+{context}
 
-    # Si no, devolvemos los primeros k originales
+### Pregunta:
+{question}
 
-    print("\n🔎 Resultados FAISS (con distancias):")
-    for i, (idx, dist) in enumerate(zip(indices[0], distances[0])):
-        print(f"\n--- Chunk {i + 1} (distancia coseno: {dist:.4f}) ---")
-        print(texts[idx][:400].strip() + "...\n")
+### Respuesta:"""
 
-    return top_chunks[:k]
-
-
-# Responder pregunta
-def answer_question(question, context):
-    joined_context = "\n".join(context)
-    result = qa_pipeline(question=question, context=joined_context)
-    return result
+    inputs = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=1024).to(device)
+    outputs = model.generate(
+        **inputs,
+        max_new_tokens=MAX_TOKENS,
+        do_sample=True,
+        top_k=50,
+        top_p=0.95,
+        temperature=0.7
+    )
+    answer = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    return answer.split("### Respuesta:")[-1].strip()
 
 # Loop interactivo
 while True:
@@ -67,10 +79,6 @@ while True:
         break
 
     context = retrieve_context(question)
-    print("🔎 Contexto recuperado:")
-    for i, c in enumerate(context, 1):
-        print(f"\n--- Documento {i} ---\n{c[:600]}...\n")
-
-    answer = answer_question(question, context)
-    print("\n🧠 Respuesta:")
-    print(f"{answer['answer']} (confianza: {answer['score']:.2f})\n")
+    answer = generate_answer(question, context)
+    print("\n🧠 Respuesta generada:")
+    print(answer + "\n")
