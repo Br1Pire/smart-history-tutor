@@ -178,3 +178,11 @@ cython_debug/
 extra/
 test/
 src/core/models/
+src/models/
+
+src/core/download_generative_model.py
+src/data/raw/apuntes_historia.json
+src/data/raw/corpus_cantu.json
+src/data/raw/extract_corpus_from_cadeno.py
+src/data/raw/extract_corpus_from_cantu.py
+src/models/
