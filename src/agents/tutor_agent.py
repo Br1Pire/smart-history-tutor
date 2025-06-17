@@ -44,8 +44,7 @@ def tutor_session(question: str, auto_crawl: bool = True) -> str:
         print(f"\n📚 Contexto recuperado (longitud total: {len(combined_context)} caracteres) [Intento {attempt + 1}]")
         for i, r in enumerate(context_results):
             print(f"🔹 Chunk {i + 1} | Score: {r['score']:.4f}")
-            # El split "__" está bien, pero si el id no tiene sección, el split[1] podría fallar.
-            # Mejorar el manejo de ID si la sección puede ser nula.
+
             id_parts = r.get('id', 'Desconocido').split("__")
             title_part = id_parts[0] if len(id_parts) > 0 else 'Desconocido'
             section_part = id_parts[1] if len(id_parts) > 1 else 'General'  # 'General' como fallback
