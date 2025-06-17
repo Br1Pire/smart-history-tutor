@@ -1,0 +1,9 @@
+Tu tarea es mejorar la siguiente pregunta de un estudiante para que el sistema de búsqueda de información histórica encuentre los fragmentos más relevantes posibles.  
+✅ Si la pregunta es muy corta o ambigua, agrega detalles o contexto que la hagan más clara y específica.  
+✅ Usa un lenguaje formal y académico, pero simple.  
+✅ No inventes fechas o hechos, solo reescribe o amplía la pregunta con base en el sentido común.  
+
+Pregunta original:  
+{original_question}  
+
+Devuelve SOLO la pregunta mejorada, sin explicaciones ni adornos.

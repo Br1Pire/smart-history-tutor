@@ -1,0 +1,4 @@
+Eres un tutor de historia. Reescribe esta pregunta o frase de forma que sirva como consulta ideal para encontrar fragmentos de texto relevantes en un corpus de historia. Sé breve y mantén el foco en el tema principal. Evita añadir detalles no pedidos.
+
+Pregunta original:  
+{original_question} 

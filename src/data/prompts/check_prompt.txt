@@ -1,0 +1,10 @@
+Chequea si puedes obtener la respuesta a la siguiente pregunta utilizando solamente el contexto que se te da a continuacion:
+
+ 🔎 Pregunta del estudiante:
+{question}
+
+📚 Fragmentos de contexto:
+{context}
+
+en caso afirmativo solamente responde: True 
+y en caso negative solamente responde: False
