@@ -1,138 +1,185 @@
 import os
 import google.generativeai as genai
+import logging
+from src.config import LOG_FILES, GOOGLE_API_KEY, PROMPT_FILES,GENERATIVE_MODEL_NAME
+import time
 
-# Configura tu clave API desde variable de entorno
-GOOGLE_API_KEY="AIzaSyAAY_YacYAzOV-klmHA_uFjyFDSMrEFtDI"
-#GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+# Configuración de logs
+LOG_FILE = LOG_FILES["generator"]
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    handlers=[
+        logging.FileHandler(LOG_FILE, mode='a', encoding='utf-8'),
+        logging.StreamHandler()
+    ]
+)
 
 if not GOOGLE_API_KEY:
+    logging.error("❌ La clave de API no está configurada.")
     raise ValueError("La variable de entorno GOOGLE_API_KEY no está configurada.")
 
 genai.configure(api_key=GOOGLE_API_KEY)
 
-# Modelo recomendado (precisión vs. tokens)
-MODEL_NAME = "gemini-1.5-flash"
+MODEL_NAME = GENERATIVE_MODEL_NAME
 model = genai.GenerativeModel(MODEL_NAME)
+logging.info(f"✅ Modelo generativo '{MODEL_NAME}' configurado.")
 
 
-# Utilidad para cargar plantilla de prompt
 def load_prompt_template(path):
+    """
+    Carga el contenido de un archivo de plantilla de prompt.
+
+    Args:
+        path (str): Ruta al archivo de plantilla.
+
+    Returns:
+        str: Contenido de la plantilla.
+    """
     with open(path, "r", encoding="utf-8") as f:
+        logging.info(f"📂 Prompt template cargado: {path}")
         return f.read()
 
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-# Paths a los prompts
-ANSWER_PROMPT_PATH = os.path.join(BASE_DIR,"data", "prompts", "answer_prompt.txt")
-CHECK_PROMPT_PATH = os.path.join(BASE_DIR,"data", "prompts", "check_prompt.txt")
-REFINE_PROMPT_PATH = os.path.join(BASE_DIR,"data", "prompts", "refine_prompt.txt")
-FIX_PROMPT_PATH = os.path.join(BASE_DIR,"data", "prompts", "fix_prompt.txt")
-WIKI_ARTICLE_PROMPT_PATH = os.path.join(BASE_DIR,"data", "prompts", "wiki_article_prompt.txt")
+# Rutas a plantillas
+ANSWER_PROMPT_PATH = PROMPT_FILES["answer"]
+CHECK_PROMPT_PATH = PROMPT_FILES["check"]
+REFINE_PROMPT_PATH = PROMPT_FILES["refine"]
+FIX_PROMPT_PATH = PROMPT_FILES["fix"]
+WIKI_ARTICLE_PROMPT_PATH = PROMPT_FILES["wiki"]
 
-# Cargar templates
+# Cargar plantillas
 ANSWER_PROMPT_TEMPLATE = load_prompt_template(ANSWER_PROMPT_PATH)
 CHECK_PROMPT_TEMPLATE = load_prompt_template(CHECK_PROMPT_PATH)
 REFINE_PROMPT_TEMPLATE = load_prompt_template(REFINE_PROMPT_PATH)
 FIX_PROMPT_TEMPLATE = load_prompt_template(FIX_PROMPT_PATH)
 WIKI_ARTICLE_PROMPT_TEMPLATE = load_prompt_template(WIKI_ARTICLE_PROMPT_PATH)
 
-# Función para generar respuesta
+
 def generate_answer(question: str, context_chunks: list[str]) -> str:
+    """
+    Genera una respuesta usando el modelo generativo y un contexto dado.
+
+    Args:
+        question (str): Pregunta del usuario.
+        context_chunks (list): Lista de fragmentos de contexto.
+
+    Returns:
+        str: Respuesta generada o mensaje de error.
+    """
     context_text = "\n".join(f"- {chunk['chunk'].strip()}" for chunk in context_chunks)
     prompt = ANSWER_PROMPT_TEMPLATE.format(question=question, context=context_text)
-
     try:
+        logging.info(f"📝 Generando respuesta para: '{question}'")
         response = model.generate_content(prompt)
+        logging.info("✅ Respuesta generada con éxito.")
         return response.text.strip()
     except Exception as e:
+        logging.error(f"⚠️ Error generando respuesta: {e}")
+        time.sleep(15)
         return f"⚠️ Error generando respuesta: {e}"
 
-# Nueva función para chequeo
+
 def check_context(question: str, context_chunks: list[str]) -> bool:
+    """
+    Verifica si el contexto es suficiente para responder la pregunta.
+
+    Args:
+        question (str): Pregunta del usuario.
+        context_chunks (list): Fragmentos de contexto.
+
+    Returns:
+        bool: True si el contexto es suficiente, False en caso contrario.
+    """
     context_text = "\n".join(f"- {chunk['chunk'].strip()}" for chunk in context_chunks)
     prompt = CHECK_PROMPT_TEMPLATE.format(question=question, context=context_text)
-
     try:
+        logging.info(f"🔍 Chequeando contexto para: '{question}'")
         response = model.generate_content(prompt)
         result = response.text.strip().lower()
-
-        if "true" in result:
-            return True
-        elif "false" in result:
-            return False
-        else:
-            # Si la respuesta no es clara
-            return False
+        logging.info(f"Resultado del chequeo: {result}")
+        time.sleep(15)
+        return "true" in result
     except Exception as e:
-        print(f"⚠️ Error durante el chequeo: {e}")
+        logging.error(f"⚠️ Error durante el chequeo: {e}")
         return False
 
+
 def refine_question(original_question: str) -> str:
+    """
+    Mejora la redacción de una pregunta dada.
+
+    Args:
+        original_question (str): Pregunta original.
+
+    Returns:
+        str: Pregunta refinada o la original en caso de error.
+    """
     prompt = REFINE_PROMPT_TEMPLATE.format(original_question=original_question)
-
     try:
+        logging.info(f"✨ Refinando pregunta: '{original_question}'")
         response = model.generate_content(prompt)
-        print(f"La pregunta ha sido mejorada a: {response.text.strip()}")
-        return response.text.strip()
+        refined = response.text.strip()
+        logging.info(f"✅ Pregunta refinada: '{refined}'")
+        time.sleep(15)
+        return refined
     except Exception as e:
-        print(f"Error refinando pregunta: {e}")
-        return original_question  # fallback
-
-def fix_question(original_question: str) -> str:
-    prompt = FIX_PROMPT_TEMPLATE.format(original_question=original_question)
-
-    try:
-        response = model.generate_content(prompt)
-        print(f"La pregunta ha sido mejorada a: {response.text.strip()}")
-        return response.text.strip()
-    except Exception as e:
-        print(f"Error refinando pregunta: {e}")
+        logging.error(f"⚠️ Error refinando pregunta: {e}")
         return original_question
 
-def wiki_query(question: str) -> str:
-    prompt = WIKI_ARTICLE_PROMPT_TEMPLATE.format(question=question)
 
+def fix_question(original_question: str) -> str:
+    """
+    Corrige posibles errores en la pregunta.
+
+    Args:
+        original_question (str): Pregunta original.
+
+    Returns:
+        str: Pregunta corregida o la original en caso de error.
+    """
+    prompt = FIX_PROMPT_TEMPLATE.format(original_question=original_question)
     try:
+        logging.info(f"🛠 Arreglando pregunta: '{original_question}'")
         response = model.generate_content(prompt)
-        print(f"Se genero el prompt: {response.text.strip()}")
-        return response.text.strip()
+        fixed = response.text.strip()
+        logging.info(f"✅ Pregunta arreglada: '{fixed}'")
+        time.sleep(15)
+        return fixed
     except Exception as e:
-        print(f"Error generando prompt: {e}")
+        logging.error(f"⚠️ Error arreglando pregunta: {e}")
+        return original_question
+
+
+def wiki_query(question: str) -> str:
+    """
+    Genera una query para buscar en Wikipedia basada en la pregunta.
+
+    Args:
+        question (str): Pregunta del usuario.
+
+    Returns:
+        str: Query generada o la pregunta original en caso de error.
+    """
+    prompt = WIKI_ARTICLE_PROMPT_TEMPLATE.format(question=question)
+    try:
+        logging.info(f"🌐 Generando query para Wikipedia: '{question}'")
+        response = model.generate_content(prompt)
+        query = response.text.strip()
+        logging.info(f"✅ Query generado: '{query}'")
+        time.sleep(15)
+        return query
+    except Exception as e:
+        logging.error(f"⚠️ Error generando query: {e}")
         return question
 
-# Modo prueba rápida
+
 if __name__ == "__main__":
     q1 = "¿Cuándo comenzó la Revolución Francesa?"
     q2 = "¿Quién fue Napoleón?"
     q3 = "¿Qué causó la Segunda Guerra Mundial?"
-    # ctx = [
-    #     "La invasión alemana a Polonia comenzó el 1 de septiembre de 1939.",
-    #     "Francia y Reino Unido declararon la guerra a Alemania el 3 de septiembre de ese mismo año."
-    # ]
-    ctx = [
-        "Al contrario que en otros países el servicio militar obligatorio no se impuso hasta 1916, aunque la ley fue modificada con el paso de los años: por ejemplo en su primera versión los hombres casados estaban exentos de ser llamados a filas, al igual que miembros del clero u hombres casados y con hijos. Los irlandeses, debido a la inestable situación política, no fueron llamados a filas, por lo que el reclutamiento forzoso solo se aplicó en Inglaterra, Gales y Escocia. En Estados Unidos el reclutamiento comenzó en 1917 y en general fue bien recibido por la opinión pública, aunque se produjeron algunos conatos de rebelión en zonas rurales aisladas. En un principio el gobierno había previsto un servicio militar voluntario, pero cuando en las seis primeras semanas de guerra apenas se habían alistado 73 000 voluntarios del millón esperado, se impuso el reclutamiento forzoso, que solo en 1917 registró a 10 millones de hombres y para finales de 1918 a 24 millones, de los cuales se escogieron para el servicio militar a algo menos de tres millones. Las formas de resistencia al reclutamiento fueron desde protestas pacíficas hasta manifestaciones violentas con velados ataques a la guerra, movimientos que estuvieron capitaneados por periódicos, socialistas y en menor medida anarquistas, de hecho la Corte Suprema de Estados Unidos debió confirmar la constitucionalidad del servicio militar obligatorio el 7 de enero de 1918. Otro caso especial fue el de Austria Hungría, que empleó un sistema mixto de reclutamiento: mientras el servicio militar era obligatorio para los soldados, los oficiales podían servir de manera voluntaria. Esto provocó que una cuarta parte del ejército estuviera formada por eslavos, mientras que el 75 % de los oficiales tenían un origen germano. Este desequilibrio, descrito como «un ejército formado por soldados desafectos dirigidos por oficiales de estilo colonial», contribuyó en gran medida a la pobre actuación austriaca en la guerra.",
-        "La Segunda Guerra Mundial fue un conflicto militar global que se desarrolló entre 1939 y 1945. En ella se vieron implicadas la mayor parte de las naciones del mundo —incluidas todas las grandes potencias, así como prácticamente todas las naciones europeas— agrupadas en dos alianzas militares enfrentadas: los Aliados, por un lado, y las Potencias del Eje, por otro. Fue la mayor contienda bélica en la historia de la humanidad, con más de cien millones de militares movilizados y un estado de guerra total en que los grandes contendientes destinaron toda su capacidad económica, militar y científica al servicio del esfuerzo bélico, borrando la distinción entre recursos civiles y militares. Marcada por hechos de enorme repercusión que incluyeron la muerte masiva de civiles (el Holocausto, los bombardeos masivos sobre ciudades y el uso, por primera vez en un conflicto bélico, de armas nucleares), la Segunda Guerra Mundial fue la más mortífera de la historia, con un resultado de entre 50 y 70 millones de víctimas, el 2,5 % de la población mundial de esa época. El comienzo del conflicto se suele situar en el 1 de septiembre de 1939, con la invasión alemana de Polonia, cuando Hitler se decidió a la incorporación de una de sus reivindicaciones expansionistas más delicadas: El Corredor Polaco, que implicaba la invasión de la mitad occidental de Polonia; la mitad oriental, junto con Estonia, Letonia y Lituania fue ocupada por la Unión Soviética, mientras que Finlandia logró mantener su independencia de los soviéticos (guerra de Invierno). El Reino Unido y Francia le declararon la guerra a Alemania, que esperaban que esta fuera, como una repetición de la guerra de trincheras de la Primera Guerra Mundial («guerra de mentira») para la que habían tomado toda clase de precauciones (línea Maginot) que demostraron ser del todo inútiles. Las maniobras espectaculares de la blitzkrieg («guerra relámpago») proporcionaron en pocos meses a Alemania el control de Noruega, Dinamarca, Países Bajos, Bélgica y la propia Francia, mientras que el ejército británico escapaba in extremis desde las playas de Dunkerque durante la batalla de Francia.",
-        "La Sociedad de Naciones, a la que se responsabilizó de contribuir a desatar la guerra, fue reemplazada por la ONU. La carta de las Naciones Unidas se firmó en San Francisco el 26 de junio de 1945. En los Juicios de Núremberg y Tokio, parte de la jerarquía nazi y del Tenno nipón fue juzgada y condenada por crímenes contra la humanidad. La investigación científica y técnica, en su conjunto, se benefició de un fuerte impulso en particular: el dominio del átomo tras el Proyecto Manhattan. También contribuyó a la creación del helicóptero, los aviones de reacción y la creación del ICBM. Los soviéticos, que se aliaron con EE. UU. y los aliados solo por conveniencia contra el enemigo común, Alemania, se convirtieron en enemigos por sus ideales contrarios, y así comenzó una era de guerra fría a nivel mundial, concentrándose en Europa. En Alemania tras la firma del armisticio por parte del Eje, el Plan Marshall contribuyó a la reconstrucción de Alemania. Si bien los alemanes perdieron la guerra, sus adelantos en tecnología punta en cadenas de industrias, fabricación de componentes para cohetes, misiles y diversos tipos de armas ayudaron a los Aliados del Oeste y sirvieron para el llamado «milagro alemán». Sin embargo se presentó la expulsión de alemanes en Europa central (Prusia, Checoslovaquia, Polonia y países bálticos) donde había asentamientos alemanes desde varios siglos atrás. Los alemanes de los Sudetes, que pedían su incorporación a Alemania, habían desencadenado el desmantelamiento de Checoslovaquia, acordado en los Acuerdos de Múnich de 1938. Tras la toma de esos territorios por el ejército soviético, numerosos alemanes fueron expulsados o dejaron su tierra para ir a Alemania o Austria, en condiciones generalmente dramáticas. Los Estados Unidos tomaron la iniciativa de una actitud «positiva». Impusieron la democracia (particularmente al Japón), a través de una depuración y de un control del Estado y la educación. Las pérdidas de vidas humanas para Estados Unidos fueron, en comparación con el resto de los Aliados, muy inferiores en número porque en su territorio no se desarrolló la guerra y las pérdidas solo fueron militares.",
-        "El inicio de la guerra en Europa, que abarca desde la invasión de Polonia en septiembre de 1939 hasta el final del perio de la Guerra de broma en mayo de 1940. Tras la invasión alemana de Polonia, que fue el detonante de la Segunda Guerra Mundial en el frente europeo, las principales potencias europeas, como el Reino Unido y Francia, declararon la guerra a la Alemania nazi. Sin embargo, durante los primeros meses del conflicto, las hostilidades en el frente occidental fueron limitadas, caracterizada por una falta de enfrentamientos directos entre las grandes potencias en la región, mientras que los combates se concentraron principalmente en el este, en la campaña polaca. Este período de relativa calma en el frente occidental terminó con el comienzo de la invasión alemana de Francia y los países bajos en mayo de 1940.",
-        "La Segunda Guerra Mundial en Europa puede entenderse como la prolongación de los conflictos no resueltos tras la Primera Guerra Mundial. Aunque la Gran Guerra terminó en 1918, las tensiones y rivalidades entre las naciones europeas quedaron lejos de solucionarse. Alemania, a pesar de su rendición, no había sido invadida militarmente y su monarquía, precedida por Guillermo II de Alemania había sido derrocada en medio de una revolución interna, lo que llevó a muchos alemanes a creer que podían negociar condiciones de paz más justas basadas en los Catorce Puntos propuestos por el presidente estadounidense Woodrow Wilson. Sin embargo, esta expectativa se desvaneció rápidamente. El orden establecido al final de la guerra, lejos de consolidar una paz duradera, provocó un profundo resentimiento en Alemania. La pérdida de territorios y colonias, sumada a una fuerte crisis económica y política, creó un ambiente de frustración que muchos alemanes dirigieron hacia los grupos que habían impulsado la revolución de Noviembre y la caída del antiguo régimen. El Imperio Austrohúngaro se fragmentó en múltiples naciones; Austria y Hungría se convirtieron en estados independientes y nuevas entidades como Checoslovaquia y Yugoslavia surgieron a partir de sus antiguos territorios. Por su parte, Rusia, en plena revolución bolchevique, perdió el control sobre vastas regiones, incluidos los países bálticos, mientras luchaba por imponerse en una devastadora guerra civil. En este nuevo mapa europeo, surgieron once estados que pretendían actuar como barreras tanto contra una posible expansión alemana como contra la amenaza del comunismo soviético. Sin embargo, las tensiones nacionales, las rivalidades territoriales y las fragilidades políticas de estos nuevos países mantuvieron a Europa en un estado de inestabilidad permanente, abonando el terreno para futuros conflictos.",
-        "La Primera Guerra Mundial (28 de julio de 1914-11 de noviembre de 1918), también conocida como la Gran Guerra, fue un conflicto mundial entre dos coaliciones: los Aliados (o Entente) y las Potencias Centrales. Los combates tuvieron lugar principalmente en Europa y Oriente Medio, así como en partes de África y Asia-Pacífico, y en Europa se caracterizaron por la guerra de trincheras, el uso generalizado de artillería, ametralladoras y armas químicas (gas), y la introducción de tanques y aviones. La Primera Guerra Mundial fue uno de los conflictos más mortíferos de la historia, con un saldo de unos 10 millones de muertos militares y más de 20 millones de heridos, además de unos 10 millones de muertos civiles por causas que incluían el genocidio. El movimiento de grandes cantidades de personas fue un factor importante en la mortal pandemia de gripe española. Esta guerra recibió el calificativo de «mundial» porque se vieron involucradas todas las grandes potencias industriales y militares de la época, divididas en dos alianzas: por un lado, la Triple Alianza formada por las Potencias Centrales (el Imperio alemán y Austria-Hungría). Italia, que había sido miembro de la Triple Alianza junto a Alemania y Austria-Hungría, no se unió a las Potencias Centrales, pues Austria, en contra de los términos pactados, fue la nación agresora que desencadenó el conflicto. Por otro lado se encontraba la Triple Entente, formada por el Reino Unido, Francia y el Imperio ruso. Ambas alianzas sufrieron cambios y fueron varias las naciones que acabarían ingresando en las filas de uno u otro bando según avanzaba la guerra: Italia, el Imperio del Japón y Estados Unidos se unieron a la Triple Entente, mientras el Imperio otomano y el Reino de Bulgaria se unieron a las Potencias Centrales. Más de 70 millones de militares, de los cuales 60 millones eran europeos, se movilizaron y combatieron en la entonces guerra más grande de la historia. Hasta antes del comienzo de la Segunda Guerra Mundial, esta guerra era llamada «Gran Guerra» o «Guerra Mundial», expresión esta última que en Alemania comenzó a utilizarse desde su comienzo (Weltkrieg), aunque solo se generalizó en Francia (Guerre Mondiale) y en el Reino Unido (World War) en la década de 1930, mientras que en Estados Unidos la denominación se impuso a partir de su intervención en 1917, ya que allí se la conocía como «Guerra Europea».",
-        "En un principio las clases altas temieron una dura respuesta por parte de la clase obrera en caso de conflicto, de hecho en países como Francia se prepararon medidas para neutralizar intentonas revolucionarias, sin embargo esto nunca se materializó, más bien todo lo contrario. La habilidad con que los países beligerantes presentaron la guerra a su población les aseguró una casi total adhesión de las masas, una situación que no obstante fue breve. Varios partidos socialistas apoyaron inicialmente la guerra en agosto de 1914; los socialistas europeos estaban fuertemente divididos entre aquellos que decidieron apoyar a sus gobiernos y se unieron al fervor nacionalista y patriótico de entonces, dejando a un lado sus tesis internacionalistas, y aquellos que adoptaron una posición contraria a la guerra, especialmente los socialistas más escorados a la izquierda, marxistas y sindicalistas, que vieron en ella una nueva expresión de la lucha de clases. Una vez comenzó la guerra, una mayoría de socialistas austriacos, británicos, franceses, alemanes y rusos apoyaron el esfuerzo bélico de sus naciones. En los Balcanes, los partidarios del yugoslavismo, encabezados por su líder Ante Trumbic, apoyaron firmemente la guerra, deseosos de liberar los Balcanes del control de Austria-Hungría y otras potencias extranjeras, aspirando a la creación de una Yugoslavia independiente. El comité yugoslavo, dirigido por Trumbic, se constituyó en París, aunque al poco tiempo trasladó su sede a Londres. En abril de 1918, se reunió «el congreso de las nacionalidades oprimidas» en Roma, con participación de checoslovacos, italianos, polacos, transilvanos y yugoslavos que instaron a los Aliados a apoyar la autodeterminación de los pueblos bajo la soberanía de Austria-Hungría. En Oriente Próximo, el nacionalismo árabe se disparó en los territorios otomanos fuera de Anatolia en respuesta al surgimiento del nacionalismo turco durante la guerra, donde los líderes del movimiento ya abogaban por la creación de un estado panárabe. En 1916, la rebelión árabe tomó forma en aquellos territorios otomanos de Oriente Próximo que luchaban por su independencia. En África oriental, Iyasu V de Etiopía apoyó al Estado derviche de Somalia que combatía contra los británicos en la campaña de Somalilandia. Von Syburg, enviado alemán a Addis Abeba dijo: «ahora ha llegado el momento de que Etiopía recupere las costas del mar Rojo, mande a los italianos de vuelta a casa y lleve las fronteras del imperio a su límite anterior».",
-        "La Primera Guerra Mundial comenzó con un choque de la tecnología del siglo XX con las tácticas militares del siglo XIX, con la inevitable pérdida de numerosas tropas. Sin embargo, a finales de 1917 los grandes ejércitos, que sumaban millones de hombres en sus filas, se habían modernizado y hacían uso de los últimos avances tecnológicos, como el teléfono, la comunicación inalámbrica, los vehículos blindados, carros de combate y aviones. La guerra de trincheras y el estancamiento del frente forzó la reorganización de las formaciones de infantería: si en los comienzos la principal unidad estaba formada por unos 100 hombres, las circunstancias favorecieron el empleo de escuadrones de ataque de 10 hombres o menos al mando de un suboficial menor. La artillería también protagonizó otra revolución tecnológica. En 1914, los cañones se empezaron a emplear en el frente para el ataque directo de objetivos, pero en 1917 el fuego indirecto con cañones (incluidos morteros o incluso ametralladoras) era común y se empleaban nuevas tácticas para detectar y variar objetivos, sobre todo con el uso de aviones y teléfonos de campaña. Con estas mejoras también se convirtió en algo habitual el fuego contra-batería, con el fin de intentar neutralizar la artillería enemiga. Alemania estuvo muy por delante de la Entente en la utilización de fuego indirecto con baterías pesadas, pues el ejército alemán empleó desde un principio obuses de 150 y 210 mm, mientras que en 1914, la artillería típica de franceses y británicos era de 75 y 105 mm. Los británicos tenían un tipo de obús de 152 mm, pero era tan pesado que debía ser arrastrado hasta el campo de batalla en piezas y ensamblado allí. Los alemanes en cambio poseían cañones austríacos de hasta 305 y 420 mm e incluso al comienzo de la guerra tenían en sus arsenales morteros Minenwerfer, ideales para la guerra de trincheras. Las armas terrestres más poderosas utilizadas fueron los cañones ferroviarios, con un peso unitario de varias decenas de toneladas.",
-        "Las causas bélicas del estallido de la Segunda Guerra Mundial son, en Occidente, la invasión de Polonia por las tropas alemanas; y en Oriente, la invasión japonesa de China, las colonias británicas y neerlandesas y posteriormente el ataque a Pearl Harbor. La Segunda Guerra Mundial estalló después de que estas acciones agresivas recibieran como respuesta una declaración de guerra, la resistencia armada o ambas, por parte de los países agredidos y aquellos con los que mantenían tratados. En un primer momento, los países aliados estaban formados tan solo por Polonia, Reino Unido y Francia, mientras que las fuerzas del Eje las constituían únicamente Alemania e Italia en una alianza llamada el Pacto de Acero. A medida que la guerra progresó, los países que iban entrando en ella (por ser atacados o tener tratados con los países agredidos) se alinearon en uno de los dos bandos, dependiendo de cada situación. Ese fue el caso de los Estados Unidos y la URSS, atacados respectivamente por Japón y Alemania. Algunos países, como Hungría o Italia, cambiaron sus alianzas en las fases finales de la guerra.",
-        "Tras una gran ofensiva alemana a principios de 1918 a lo largo de todo el frente occidental, los Aliados hicieron retroceder a los alemanes en una serie de exitosas ofensivas. Alemania, en plena revolución, solicitó un armisticio el 11 de noviembre de 1918, poniendo fin a la guerra con la victoria aliada. Tras el fin de la guerra, cuatro grandes imperios dejaron de existir: el alemán, el ruso, el austrohúngaro y el otomano. Los Estados sucesores de los dos primeros perdieron una parte importante de sus antiguos territorios, mientras que los dos últimos se desmantelaron. El mapa de Europa y sus fronteras cambiaron por completo y varias naciones se independizaron o se crearon. Al calor de la Primera Guerra Mundial se fraguó la revolución rusa, que concluyó con la creación del primer Estado en la historia autodenominado socialista: la Unión Soviética. Tras seis meses de negociaciones en la Conferencia de Paz de París, el 28 de junio de 1919 los países aliados firmaron el Tratado de Versalles con Alemania, y otros a lo largo del siguiente año con cada una de las potencias derrotadas. Más de nueve millones de combatientes y siete millones de civiles perdieron la vida (el 1 % de la población mundial), una cifra extraordinaria, dada la sofisticación tecnológica e industrial de los beligerantes. Es el quinto conflicto más mortífero de la historia de la humanidad. La convulsión que provocó la guerra allanó el camino a grandes cambios políticos, sociales y económicos, con revoluciones de un carácter nunca visto en varias de las naciones involucradas. Se fundó la Sociedad de Naciones, con el objetivo de evitar que un conflicto de tal magnitud se repitiese; sin embargo, dos décadas después estalló la Segunda Guerra Mundial. Entre sus razones se pueden señalar: el alza de los nacionalismos, una cierta debilidad de los Estados democráticos, la humillación sentida por Alemania tras su derrota, las grandes crisis económicas y, sobre todo, el auge del fascismo."
-    ]
 
-    # print("📝 Generando respuesta:")
-    # print(generate_answer(q, ctx))
-    #
-    # print("\n🔍 Chequeando si el contexto tiene respuesta:")
-    # print(check_context(q, ctx))
-
-    print(f"Pregunta: {q1}")
     refine_question(q1)
-
-    print(f"Pregunta: {q2}")
     refine_question(q2)
-
-    print(f"Pregunta: {q3}")
     refine_question(q3)

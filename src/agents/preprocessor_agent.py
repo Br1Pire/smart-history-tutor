@@ -4,26 +4,28 @@ import re
 import spacy
 import logging
 from src.core.metaheuristic_chunking import chunk_section_text_metaheuristic
+from src.config import LOG_FILES, RAW_FILE, PROCESSED_FILE, MAX_CHUNK_SIZE, MIN_CHUNK_SIZE
 
 # Configuración de logs
+LOG_FILE = LOG_FILES["preprocessor"]
+
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler(LOG_FILE, mode='a', encoding='utf-8'),
+        logging.StreamHandler()
+    ]
 )
 
 # Configuración de SpaCy
-logging.info("Cargando modelo SpaCy...")
+logging.info("🚀 Cargando modelo SpaCy (es_core_news_md)...")
 nlp = spacy.load("es_core_news_md", disable=["parser", "lemmatizer", "textcat"])
 nlp.add_pipe("sentencizer")
-logging.info("Modelo SpaCy cargado.")
+logging.info("✅ Modelo SpaCy cargado correctamente.")
 
-# Configuración de rutas
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-INPUT_FILE = os.path.join(BASE_DIR, "data", "raw", "wiki_articles_raw.json")
-OUTPUT_FILE = os.path.join(BASE_DIR, "data", "processed", "wiki_articles_processed.json")
-
-MAX_CHUNK_SIZE = 500
-MIN_CHUNK_SIZE = 400
+INPUT_FILE = RAW_FILE
+OUTPUT_FILE = PROCESSED_FILE
 
 EXCLUDED_SECTIONS = [
     "referencias",
@@ -39,67 +41,91 @@ EXCLUDED_SECTIONS = [
 
 
 def load_articles(path):
+    """
+    Carga artículos desde un archivo JSON.
+
+    Args:
+        path (str): Ruta del archivo de entrada.
+
+    Returns:
+        list: Lista de artículos cargados o lista vacía si no existe.
+    """
     if not os.path.exists(path):
-        logging.error(f"Archivo no encontrado: {path}")
+        logging.error(f"❌ Archivo no encontrado: {path}")
         return []
     with open(path, "r", encoding="utf-8") as f:
+        logging.info(f"📂 Artículos cargados desde: {path}")
         return json.load(f)
 
+
 def load_existing_chunks(path):
+    """
+    Carga chunks previamente generados.
+
+    Args:
+        path (str): Ruta del archivo JSON.
+
+    Returns:
+        list: Lista de chunks existentes o lista vacía.
+    """
     if not os.path.exists(path):
+        logging.info("ℹ️ No se encontraron chunks existentes previos.")
         return []
     with open(path, "r", encoding="utf-8") as f:
+        logging.info(f"📂 Chunks existentes cargados desde: {path}")
         return json.load(f)
 
 
 def clean_text(text):
-    # Elimina referencias tipo [1], [12], [b], [nota 1], [abc], etc.
+    """
+    Limpia un texto eliminando patrones irrelevantes y normalizando espacios.
+
+    Args:
+        text (str): Texto original.
+
+    Returns:
+        str: Texto limpio.
+    """
+    original_len = len(text)
     text = re.sub(r'\[[^\]]+\]', '', text)
-
-    # Elimina encabezados tipo === Sección ===
     text = re.sub(r'=+\s*[^=]+?\s*=+', '', text)
-
-    # Elimina caracteres invisibles Unicode
     text = re.sub(r'[\u200b\u200c\u200d\uFEFF]', '', text)
-
-    # Elimina ISBN y ISSN
     text = re.sub(r'ISBN[\s\d\-]+', '', text)
     text = re.sub(r'ISSN[\s\d\-]+', '', text)
-
-    # Elimina (ver algo)
     text = re.sub(r'\((?:[Vv]er )[^)]+\)', '', text)
-
-    # Elimina secciones finales comunes
     text = re.sub(r'\b(Véase también|Referencias|Bibliografía|Enlaces externos)\b.*', '', text, flags=re.IGNORECASE)
-
-    # Elimina comillas
     text = text.replace('"', '').replace("'", '')
-
-    # Normaliza saltos de línea y espacios
     text = re.sub(r'\n+', ' ', text)
     text = re.sub(r'\s+', ' ', text).strip()
-
+    logging.debug(f"Texto limpiado: {original_len} -> {len(text)} caracteres")
     return text
 
+
 def split_by_section(content):
+    """
+    Divide un contenido en secciones según encabezados de Wikipedia.
+
+    Args:
+        content (str): Texto del artículo.
+
+    Returns:
+        list: Lista de tuplas (nombre_sección, texto).
+    """
     pattern = r"(==+)\s*(.*?)\s*\1"
     matches = list(re.finditer(pattern, content))
 
     splits = []
-
     if not matches:
         splits.append((None, content.strip()))
         return splits
 
-    first_match = matches[0]
-    pre_section_text = content[:first_match.start()].strip()
+    pre_section_text = content[:matches[0].start()].strip()
     if pre_section_text:
         splits.append((None, pre_section_text))
 
     for i in range(len(matches)):
-        current = matches[i]
-        section_name = current.group(2).strip()
-        section_start = current.end()
+        section_name = matches[i].group(2).strip()
+        section_start = matches[i].end()
         section_end = matches[i + 1].start() if i + 1 < len(matches) else len(content)
         section_content = content[section_start:section_end].strip()
         if section_content:
@@ -107,17 +133,36 @@ def split_by_section(content):
 
     return splits
 
-def chunk_section_text(section_name, text):
-    doc = nlp(clean_text(text))
 
+def chunk_section_text(section_name, text):
+    """
+    Genera chunks de un texto aplicando la metaheurística de chunking.
+
+    Args:
+        section_name (str or None): Nombre de la sección.
+        text (str): Texto de la sección.
+
+    Returns:
+        list: Lista de chunks generados.
+    """
+    logging.info(f"🔹 Chunking sección: '{section_name or 'General'}'")
+    doc = nlp(clean_text(text))
     sentences = [sent.text.strip() for sent in doc.sents]
-    # for sent in sentences:
-    #     print(f"ORACIÓN: '{sent.strip()}' (len={len(sent.strip())})")
     chunk_results, score = chunk_section_text_metaheuristic(section_name, sentences, MAX_CHUNK_SIZE, MIN_CHUNK_SIZE)
-    #print(f"******** {chunk_results[0][1]}")
+    logging.info(f"✅ {len(chunk_results)} chunks generados (Score: {score:.2f}) para sección: '{section_name or 'General'}'")
     return chunk_results
 
+
 def extract_entities(text):
+    """
+    Extrae entidades nombradas del texto.
+
+    Args:
+        text (str): Texto de entrada.
+
+    Returns:
+        dict: Diccionario con listas de personas, ubicaciones y organizaciones.
+    """
     doc = nlp(text)
     entities = {"persons": [], "locations": [], "organizations": []}
     for ent in doc.ents:
@@ -129,21 +174,29 @@ def extract_entities(text):
             entities["organizations"].append(ent.text.strip())
     return {k: list(set(v)) for k, v in entities.items()}
 
+
 def process_article(article):
+    """
+    Procesa un artículo completo en chunks y extrae entidades.
+
+    Args:
+        article (dict): Artículo a procesar.
+
+    Returns:
+        list: Lista de chunks con metadatos.
+    """
     title = article.get("title", "Sin título")
     content = article.get("content", "")
+    logging.info(f"🚀 Procesando artículo: '{title}'")
 
-    logging.info(f"Procesando artículo: {title}")
     section_splits = [
         (name, text) for (name, text) in split_by_section(content)
         if name is None or name.lower().strip() not in EXCLUDED_SECTIONS
     ]
 
     final_chunks = []
-
     for section_name, sec_text in section_splits:
         chunks = chunk_section_text(section_name, sec_text)
-
         for i, (sec_name, chunk) in enumerate(chunks):
             entities = extract_entities(chunk)
             final_chunks.append({
@@ -155,15 +208,23 @@ def process_article(article):
                 "entities": entities,
                 "token_count": len(list(nlp(chunk)))
             })
-
-    logging.info(f"Artículo '{title}' generó {len(final_chunks)} chunks.")
+    logging.info(f"✅ Artículo '{title}' generó {len(final_chunks)} chunks.")
     return final_chunks
 
+
 def process_file(articles):
-    # Cargar chunks ya procesados
+    """
+    Procesa un conjunto de artículos y guarda los chunks resultantes.
+
+    Args:
+        articles (list): Lista de artículos.
+
+    Returns:
+        list: Lista de nuevos chunks generados.
+    """
     existing_chunks = load_existing_chunks(OUTPUT_FILE)
     processed_titles = {chunk["title"] for chunk in existing_chunks}
-    logging.info(f"Ya hay {len(existing_chunks)} chunks procesados de {len(processed_titles)} artículos previos.")
+    logging.info(f"ℹ️ {len(existing_chunks)} chunks existentes de {len(processed_titles)} artículos previos cargados.")
 
     all_chunks = existing_chunks.copy()
     new_chunks = []
@@ -171,37 +232,41 @@ def process_file(articles):
     for article in articles:
         title = article.get("title")
         if title in processed_titles:
-            logging.info(f"Artículo '{title}' ya procesado previamente. Se omite.")
+            logging.info(f"⏩ Artículo '{title}' ya procesado previamente. Se omite.")
             continue
-
-        # Procesar y añadir nuevos chunks
         chunks = process_article(article)
-        #print_list(chunks)
         all_chunks.extend(chunks)
         new_chunks.extend(chunks)
-        #print_list(all_chunks)
         processed_titles.add(title)
 
-    # Guardar al final
     save_chunks(all_chunks, OUTPUT_FILE)
-    logging.info(f"Proceso finalizado. Total de chunks: {len(all_chunks)}")
+    logging.info(f"💾 Chunks guardados. Total: {len(all_chunks)}")
     return new_chunks
 
-def print_list(li):
-    # for key, value in li[0].items():
-    #     print(f"{key} : {value}\n")
-    print(li[0]["content"])
 
 def save_chunks(chunks, path):
+    """
+    Guarda los chunks en un archivo JSON.
+
+    Args:
+        chunks (list): Lista de chunks.
+        path (str): Ruta del archivo de salida.
+    """
     with open(path, "w", encoding="utf-8") as f:
         json.dump(chunks, f, ensure_ascii=False, indent=2)
 
-def main():
+
+def preprocess():
+    """
+    Ejecuta el preprocesamiento de los artículos desde el archivo de entrada.
+    """
     articles = load_articles(INPUT_FILE)
     if not articles:
+        logging.warning("⚠️ No se encontraron artículos para procesar.")
         return
     process_file(articles)
+    logging.info("🏁 Proceso de preprocesamiento finalizado.")
 
 
 if __name__ == "__main__":
-    main()
+    preprocess()
