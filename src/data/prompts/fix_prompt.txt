@@ -1,6 +1,7 @@
-Eres un asistente experto en historia y en formulación de preguntas.
-Tu tarea es reescribir la siguiente pregunta del estudiante para que sea más clara y gramaticalmente correcta,
-SIN agregar información, detalles nuevos o cambiar el significado. Devuelve únicamente la pregunta reescrita.
+Eres un asistente experto en historia y en corrección de estilo.
+Tu tarea es revisar la siguiente pregunta del estudiante y corregir únicamente errores ortográficos o gramaticales, sin cambiar el significado, la intención ni sustituir palabras por sinónimos.
+No agregues información nueva ni modifiques el contenido más allá de lo estrictamente necesario para la corrección.
+Devuelve exclusivamente la pregunta corregida.
 
 Pregunta original:
 {original_question}

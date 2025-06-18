@@ -15,6 +15,7 @@ logging.basicConfig(
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 VECTOR_STORE_DIR = os.path.join(BASE_DIR, "data", "vectorstore_faiss")
 FAISS_INDEX_PATH = os.path.join(VECTOR_STORE_DIR, "faiss_index.index")
+CATEGORY_FAISS_PATH = os.path.join(VECTOR_STORE_DIR, "category_faiss.index")
 TEXTS_PATH = os.path.join(VECTOR_STORE_DIR, "texts.pkl")
 IDS_PATH = os.path.join(VECTOR_STORE_DIR, "ids.pkl")
 MODEL_PATH = os.path.join(BASE_DIR, "models", "all-mpnet-base-v2")
@@ -36,6 +37,9 @@ with open(IDS_PATH, "rb") as f:
 
 index = faiss.read_index(FAISS_INDEX_PATH)
 logging.info(f"✅ Index cargado con {index.ntotal} vectores.")
+
+categories_index = faiss.read_index(CATEGORY_FAISS_PATH)
+logging.info(f"✅ Category index cargado con {categories_index.ntotal} vectores.")
 
 # Normalización
 def normalize_vector(vec):
@@ -69,6 +73,44 @@ def retrieve_chunks_from_query_string(query_string, top_k=TOP_K):
     query_vector = embedding_model.encode([query_string]).astype("float32")
     query_vector = query_vector / np.linalg.norm(query_vector, axis=1, keepdims=True)
     return retrieve_chunks_from_vector(query_vector, top_k)
+
+
+def retrieve_chunks_with_category_rerank(query_vector, top_k=5, category_weight=0.3):
+    logging.info(f"Buscando top {top_k * 2} por texto para posible rerank...")
+    text_scores, indices = index.search(query_vector, top_k * 2)
+
+    combined = []
+    for i, idx in enumerate(indices[0]):
+        text_score = text_scores[0][i]
+
+        # Recuperar el embedding de categoría
+        cat_emb = categories_index.reconstruct(int(idx))
+
+        # No es necesario normalizar porque ya se almacenaron normalizados
+        cat_score = np.dot(cat_emb, query_vector[0])
+
+        # Combinar scores
+        combined_score = (1 - category_weight) * text_score + category_weight * cat_score
+        combined.append((idx, combined_score))
+
+        logging.info(
+            f"🔹 ID={ids[idx]}, TextScore={text_score:.4f}, CatScore={cat_score:.4f}, Combined={combined_score:.4f}")
+
+    # Ordenar por score combinado
+    combined.sort(key=lambda x: x[1], reverse=True)
+
+    # Devolver top_k final
+    final_results = []
+    for rank, (idx, score) in enumerate(combined[:top_k], start=1):
+        final_results.append({
+            "id": ids[idx],
+            "chunk": texts[idx],
+            "score": score,
+            "rank": rank
+        })
+        logging.info(f"✅ Rank {rank}: ID={ids[idx]}, Combined Score={score:.4f}")
+
+    return final_results
 
 # Prueba desde terminal
 if __name__ == "__main__":

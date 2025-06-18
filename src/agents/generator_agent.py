@@ -25,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Paths a los prompts
 ANSWER_PROMPT_PATH = os.path.join(BASE_DIR,"data", "prompts", "answer_prompt.txt")
 CHECK_PROMPT_PATH = os.path.join(BASE_DIR,"data", "prompts", "check_prompt.txt")
-REFINE_PROMPT_PATH = os.path.join(BASE_DIR,"data", "prompts", "recovery_prompt.txt")
+REFINE_PROMPT_PATH = os.path.join(BASE_DIR,"data", "prompts", "refine_prompt.txt")
 FIX_PROMPT_PATH = os.path.join(BASE_DIR,"data", "prompts", "fix_prompt.txt")
 WIKI_ARTICLE_PROMPT_PATH = os.path.join(BASE_DIR,"data", "prompts", "wiki_article_prompt.txt")
 
@@ -38,7 +38,7 @@ WIKI_ARTICLE_PROMPT_TEMPLATE = load_prompt_template(WIKI_ARTICLE_PROMPT_PATH)
 
 # Función para generar respuesta
 def generate_answer(question: str, context_chunks: list[str]) -> str:
-    context_text = "\n".join(f"- {chunk.strip()}" for chunk in context_chunks)
+    context_text = "\n".join(f"- {chunk['chunk'].strip()}" for chunk in context_chunks)
     prompt = ANSWER_PROMPT_TEMPLATE.format(question=question, context=context_text)
 
     try:
@@ -49,13 +49,13 @@ def generate_answer(question: str, context_chunks: list[str]) -> str:
 
 # Nueva función para chequeo
 def check_context(question: str, context_chunks: list[str]) -> bool:
-    context_text = "\n".join(f"- {chunk.strip()}" for chunk in context_chunks)
+    context_text = "\n".join(f"- {chunk['chunk'].strip()}" for chunk in context_chunks)
     prompt = CHECK_PROMPT_TEMPLATE.format(question=question, context=context_text)
 
     try:
         response = model.generate_content(prompt)
         result = response.text.strip().lower()
-        print(f"el chequeo fue: {response.text}")
+
         if "true" in result:
             return True
         elif "false" in result:
@@ -83,14 +83,28 @@ def fix_question(original_question: str) -> str:
 
     try:
         response = model.generate_content(prompt)
+        print(f"La pregunta ha sido mejorada a: {response.text.strip()}")
         return response.text.strip()
     except Exception as e:
         print(f"Error refinando pregunta: {e}")
         return original_question
 
+def wiki_query(question: str) -> str:
+    prompt = WIKI_ARTICLE_PROMPT_TEMPLATE.format(question=question)
+
+    try:
+        response = model.generate_content(prompt)
+        print(f"Se genero el prompt: {response.text.strip()}")
+        return response.text.strip()
+    except Exception as e:
+        print(f"Error generando prompt: {e}")
+        return question
+
 # Modo prueba rápida
 if __name__ == "__main__":
-    q = "¿Cuándo comenzó la Primera Guerra Mundial?"
+    q1 = "¿Cuándo comenzó la Revolución Francesa?"
+    q2 = "¿Quién fue Napoleón?"
+    q3 = "¿Qué causó la Segunda Guerra Mundial?"
     # ctx = [
     #     "La invasión alemana a Polonia comenzó el 1 de septiembre de 1939.",
     #     "Francia y Reino Unido declararon la guerra a Alemania el 3 de septiembre de ese mismo año."
@@ -108,8 +122,17 @@ if __name__ == "__main__":
         "Tras una gran ofensiva alemana a principios de 1918 a lo largo de todo el frente occidental, los Aliados hicieron retroceder a los alemanes en una serie de exitosas ofensivas. Alemania, en plena revolución, solicitó un armisticio el 11 de noviembre de 1918, poniendo fin a la guerra con la victoria aliada. Tras el fin de la guerra, cuatro grandes imperios dejaron de existir: el alemán, el ruso, el austrohúngaro y el otomano. Los Estados sucesores de los dos primeros perdieron una parte importante de sus antiguos territorios, mientras que los dos últimos se desmantelaron. El mapa de Europa y sus fronteras cambiaron por completo y varias naciones se independizaron o se crearon. Al calor de la Primera Guerra Mundial se fraguó la revolución rusa, que concluyó con la creación del primer Estado en la historia autodenominado socialista: la Unión Soviética. Tras seis meses de negociaciones en la Conferencia de Paz de París, el 28 de junio de 1919 los países aliados firmaron el Tratado de Versalles con Alemania, y otros a lo largo del siguiente año con cada una de las potencias derrotadas. Más de nueve millones de combatientes y siete millones de civiles perdieron la vida (el 1 % de la población mundial), una cifra extraordinaria, dada la sofisticación tecnológica e industrial de los beligerantes. Es el quinto conflicto más mortífero de la historia de la humanidad. La convulsión que provocó la guerra allanó el camino a grandes cambios políticos, sociales y económicos, con revoluciones de un carácter nunca visto en varias de las naciones involucradas. Se fundó la Sociedad de Naciones, con el objetivo de evitar que un conflicto de tal magnitud se repitiese; sin embargo, dos décadas después estalló la Segunda Guerra Mundial. Entre sus razones se pueden señalar: el alza de los nacionalismos, una cierta debilidad de los Estados democráticos, la humillación sentida por Alemania tras su derrota, las grandes crisis económicas y, sobre todo, el auge del fascismo."
     ]
 
-    print("📝 Generando respuesta:")
-    print(generate_answer(q, ctx))
+    # print("📝 Generando respuesta:")
+    # print(generate_answer(q, ctx))
+    #
+    # print("\n🔍 Chequeando si el contexto tiene respuesta:")
+    # print(check_context(q, ctx))
 
-    print("\n🔍 Chequeando si el contexto tiene respuesta:")
-    print(check_context(q, ctx))
+    print(f"Pregunta: {q1}")
+    refine_question(q1)
+
+    print(f"Pregunta: {q2}")
+    refine_question(q2)
+
+    print(f"Pregunta: {q3}")
+    refine_question(q3)

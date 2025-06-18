@@ -128,6 +128,8 @@ def crawl_titles(input_file = INPUT_FILE, output_file = OUTPUT_FILE ):
 def crawl_single_title(query, output_file = OUTPUT_FILE):
     """Procesa un solo query, verifica si el artículo ya existe y, si no, lo añade al corpus."""
 
+    logging.info(f"🌐 Crawler intentando buscar artículo para: '{query}'")
+
     # Cargar artículos existentes
     existing_articles = load_existing_articles(output_file)
     existing_titles = {a["title"] for a in existing_articles}
@@ -137,6 +139,8 @@ def crawl_single_title(query, output_file = OUTPUT_FILE):
     if not title:
         logging.warning(f"No se encontró artículo para: {query}")
         return None
+
+    logging.info(f"📄 Título elegido por el crawler: '{title}'")
 
     # Verificar duplicado
     if title in existing_titles:

@@ -166,6 +166,7 @@ def process_file(articles):
     logging.info(f"Ya hay {len(existing_chunks)} chunks procesados de {len(processed_titles)} artículos previos.")
 
     all_chunks = existing_chunks.copy()
+    new_chunks = []
 
     for article in articles:
         title = article.get("title")
@@ -177,12 +178,14 @@ def process_file(articles):
         chunks = process_article(article)
         #print_list(chunks)
         all_chunks.extend(chunks)
+        new_chunks.extend(chunks)
         #print_list(all_chunks)
         processed_titles.add(title)
 
     # Guardar al final
     save_chunks(all_chunks, OUTPUT_FILE)
     logging.info(f"Proceso finalizado. Total de chunks: {len(all_chunks)}")
+    return new_chunks
 
 def print_list(li):
     # for key, value in li[0].items():
