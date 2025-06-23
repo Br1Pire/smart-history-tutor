@@ -77,7 +77,6 @@ def generate_answer(question: str, context_chunks: list[str]) -> str:
         return response.text.strip()
     except Exception as e:
         logging.error(f"⚠️ Error generando respuesta: {e}")
-        time.sleep(15)
         return f"⚠️ Error generando respuesta: {e}"
 
 
@@ -99,7 +98,6 @@ def check_context(question: str, context_chunks: list[str]) -> bool:
         response = model.generate_content(prompt)
         result = response.text.strip().lower()
         logging.info(f"Resultado del chequeo: {result}")
-        time.sleep(15)
         return "true" in result
     except Exception as e:
         logging.error(f"⚠️ Error durante el chequeo: {e}")
@@ -122,7 +120,6 @@ def refine_question(original_question: str) -> str:
         response = model.generate_content(prompt)
         refined = response.text.strip()
         logging.info(f"✅ Pregunta refinada: '{refined}'")
-        time.sleep(15)
         return refined
     except Exception as e:
         logging.error(f"⚠️ Error refinando pregunta: {e}")
@@ -145,7 +142,6 @@ def fix_question(original_question: str) -> str:
         response = model.generate_content(prompt)
         fixed = response.text.strip()
         logging.info(f"✅ Pregunta arreglada: '{fixed}'")
-        time.sleep(15)
         return fixed
     except Exception as e:
         logging.error(f"⚠️ Error arreglando pregunta: {e}")
@@ -168,7 +164,6 @@ def wiki_query(question: str) -> str:
         response = model.generate_content(prompt)
         query = response.text.strip()
         logging.info(f"✅ Query generado: '{query}'")
-        time.sleep(15)
         return query
     except Exception as e:
         logging.error(f"⚠️ Error generando query: {e}")

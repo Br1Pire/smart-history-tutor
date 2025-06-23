@@ -35,7 +35,7 @@ TEXTS_PATH = os.path.join(VECTORSTORE_DIR, "texts.pkl")
 
 # MODELS
 MODEL_PATH = os.path.join(MODEL_DIR, "all-mpnet-base-v2")
-GENERATIVE_MODEL_NAME = "gemini-1.5-flash"
+GENERATIVE_MODEL_NAME = "gemini-2.5-flash"
 
 # PROMPT FILES
 PROMPTS_DIR = os.path.join(DATA_DIR, "prompts")
@@ -58,4 +58,4 @@ CATEGORY_WEIGHT = 0.3
 # API KEYS
 GOOGLE_API_KEY = "AIzaSyAAY_YacYAzOV-klmHA_uFjyFDSMrEFtDI"
 
-print(DATA_DIR)
+

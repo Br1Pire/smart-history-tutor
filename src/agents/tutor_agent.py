@@ -60,7 +60,6 @@ def tutor_session(question: str):
         dict: Resultado con respuesta, estrategia usada y tokens consumidos.
     """
     question = fix_question(question)
-    time.sleep(20)
     logging.info(f"👤 Usuario preguntó: '{question}'")
     total_tokens_used = 0
     query_embedding = vectorize_query(question)
@@ -150,6 +149,15 @@ def strategy_crawler(question):
     logging.info(f"✅ Crawler añadió {len(chunks)} chunks nuevos.")
     vectorize_chunks(chunks)
     return True
+
+def crawl():
+    return crawl_titles()
+
+def prepross():
+    return preprocess()
+
+def vect():
+    return vectorize()
 
 
 def tutor_loop():
