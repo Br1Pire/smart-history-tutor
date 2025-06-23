@@ -47,7 +47,7 @@ pip install -r requirements.txt
 ```
 ### 5️⃣ Ejecuta el proyecto
 ```bash
-python -m src.agents.tutor_agent
+streamlit run src/visual/app.py
 ```
 ### 💡 Descarga previa del modelo (IMPORTANTE)
 ```bash
