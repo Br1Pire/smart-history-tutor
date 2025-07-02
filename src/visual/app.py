@@ -1,9 +1,16 @@
-# app.py
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+sys.path.insert(0, project_root)
 import streamlit as st
-from src.agents.tutor_agent import tutor_session, crawl_titles, preprocess, vectorize
+from src.core.tutor_builder import create_tutor_instance
+
+@st.cache_resource
+def get_tutor_instance():
+    """Crea y cachea la instancia del Tutor."""
+    return create_tutor_instance()
+
+tutor = get_tutor_instance()
 
 st.set_page_config(page_title="History Smart Tutor", page_icon="📜")
 
@@ -12,50 +19,6 @@ st.title("📜 History Smart Tutor")
 # Inicializa historial
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
-
-# BOTONES DE UTILIDAD
-col1, col2, col3 = st.columns(3)
-if col1.button("🚀 Crawler dinámico"):
-    with st.spinner("Running crawler..."):
-        try:
-            crawl_titles()
-            response = "✅ Crawler dinámico ejecutado correctamente."
-        except Exception as e:
-            response = f"❌ Error al ejecutar crawler: {e}"
-    st.session_state.chat_history.append({
-        "question": "Crawler dinámico solicitado",
-        "answer": response,
-        "strategy": "utility_action",
-        "tokens": 0
-    })
-
-if col2.button("⚙️ Postprocesador"):
-    with st.spinner("Running postprocessor..."):
-        try:
-            preprocess()
-            response = "✅ Postprocesador ejecutado correctamente."
-        except Exception as e:
-            response = f"❌ Error al ejecutar postprocesador: {e}"
-    st.session_state.chat_history.append({
-        "question": "Postprocesador solicitado",
-        "answer": response,
-        "strategy": "utility_action",
-        "tokens": 0
-    })
-
-if col3.button("📈 Vectorización"):
-    with st.spinner("Running vectorizer..."):
-        try:
-            vectorize()
-            response = "✅ Vectorización ejecutada correctamente."
-        except Exception as e:
-            response = f"❌ Error al ejecutar vectorización: {e}"
-    st.session_state.chat_history.append({
-        "question": "Vectorización solicitada",
-        "answer": response,
-        "strategy": "utility_action",
-        "tokens": 0
-    })
 
 # Muestra el historial
 for entry in st.session_state.chat_history:
@@ -81,7 +44,7 @@ if user_input:
         st.markdown(user_input)
 
     with st.spinner("Thinking..."):
-        result = tutor_session(user_input)
+        result = tutor.answer_question(user_input)
 
     st.session_state.chat_history[-1]["answer"] = result["answer"]
     st.session_state.chat_history[-1]["strategy"] = result["strategy"]
@@ -89,4 +52,7 @@ if user_input:
 
     with st.chat_message("assistant"):
         st.markdown(result["answer"])
-        st.markdown(f"_Strategy: {result['strategy']} | Tokens used: {result['tokens_used']}_")
+        if result["strategy"] != "utility_action":
+            st.markdown(f"_Strategy: {result['strategy']} | Tokens used: {result['tokens_used']}_")
+
+    st.rerun()
