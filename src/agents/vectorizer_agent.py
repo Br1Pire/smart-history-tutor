@@ -25,7 +25,7 @@ MODEL = SentenceTransformer(str(MODEL_PATH) if os.path.exists(str(MODEL_PATH)) e
 logging.info("✅ Modelo cargado correctamente.")
 
 class Vectorizer:
-    def __init__(self, document_manager: DocumentManager , faiss_manager: FaissManager, category_manager: FaissManager):
+    def __init__(self, document_manager: DocumentManager , faiss_manager: FaissManager, category_manager: FaissManager = None):
         self.document_manager = document_manager
         self.faiss_manager = faiss_manager
         self.category_manager = category_manager
@@ -33,7 +33,7 @@ class Vectorizer:
         logging.info("Vectorizer inicializado.")
 
 
-    def _generate_embeddings(self, documents):
+    def _generate_embeddings(self, documents, cat = True):
         """
         Genera embeddings para una lista dada de documentos.
         """
@@ -51,21 +51,26 @@ class Vectorizer:
             composed_text = "\n".join(header_parts).strip()
             text_inputs.append(composed_text)
 
-            categories = doc.get('categories', [])
-            categories_text = " ".join(categories).strip()
-            category_inputs.append(categories_text)
+            if(cat):
+                categories = doc.get('categories', [])
+                categories_text = " ".join(categories).strip()
+                category_inputs.append(categories_text)
 
         logging.info(f"⚡ Generando embeddings de texto ({len(text_inputs)} entradas)...")
         text_embeddings = MODEL.encode(text_inputs, batch_size=32, show_progress_bar=True)
         text_embeddings = text_embeddings / np.linalg.norm(text_embeddings, axis=1, keepdims=True)
         logging.info("✅ Embeddings de texto generados y normalizados.")
 
-        logging.info(f"⚡ Generando embeddings de categorías ({len(category_inputs)} entradas)...")
-        category_embeddings = MODEL.encode(category_inputs, batch_size=32, show_progress_bar=True)
-        category_embeddings = category_embeddings / np.linalg.norm(category_embeddings, axis=1, keepdims=True)
-        logging.info("✅ Embeddings de categorías generados y normalizados.")
+        if(cat):
 
-        return text_embeddings, category_embeddings
+            logging.info(f"⚡ Generando embeddings de categorías ({len(category_inputs)} entradas)...")
+            category_embeddings = MODEL.encode(category_inputs, batch_size=32, show_progress_bar=True)
+            category_embeddings = category_embeddings / np.linalg.norm(category_embeddings, axis=1, keepdims=True)
+            logging.info("✅ Embeddings de categorías generados y normalizados.")
+
+            return text_embeddings, category_embeddings 
+
+        return text_embeddings
 
     @staticmethod
     def vectorize_query(query):
@@ -74,10 +79,10 @@ class Vectorizer:
         """
         embedding = MODEL.encode([query]).astype("float32")
         embedding = embedding / np.linalg.norm(embedding, axis=1, keepdims=True)
-        logging.info("✅ Vector del query generado y normalizado.")
+        logging.info("✅ Vector generado y normalizado.")
         return embedding
 
-    def vectorize(self):
+    def vectorize(self, cat = True, check = True):
         """
         Vectoriza un conjunto de chunks.
         Si chunks es None, utiliza los chunks cargados durante la inicialización (self.chunks).
@@ -89,14 +94,18 @@ class Vectorizer:
         if not new_documents: 
             logging.info("✅ No hay nuevos documentos (chunks) para vectorizar.")
             return
-
-        text_embeddings, category_embeddings = self._generate_embeddings(new_documents)
+        if cat:
+            text_embeddings, category_embeddings = self._generate_embeddings(new_documents, cat)
+        else:
+            text_embeddings = self._generate_embeddings(new_documents, cat)
 
         self.faiss_manager.add(text_embeddings)
-        self.category_manager.add(category_embeddings)
+        if cat:
+            self.category_manager.add(category_embeddings)
 
-        new_ids = [a['id'] for a in new_documents]
+        if check:
+            new_ids = [a['id'] for a in new_documents]
 
-        self.document_manager.add_ids(new_ids)
+            self.document_manager.add_ids(new_ids)
 
 

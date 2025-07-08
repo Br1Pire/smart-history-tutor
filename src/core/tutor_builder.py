@@ -21,6 +21,19 @@ logging.basicConfig(
     ]
 )
 
+def create_generator_manager():
+    doc_manager = DocumentManager(
+        raw_path=config.RAW_FILE,
+        processed_path=config.PROCESSED_FILE,
+        prompts_path=config.PROMPTS_FILE,
+        titles_path=config.TITLES_FILE,
+        ids_path=config.IDS_FILE
+    )
+
+    return doc_manager
+
+
+
 def create_tutor_instance() -> Tutor:
     """
     Instancia y configura todos los agentes y managers necesarios

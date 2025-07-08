@@ -1,0 +1,4 @@
+{
+  "check_prompt": "Chequea si puedes obtener la respuesta a la siguiente pregunta utilizando solamente el contexto que se te da a continuacion:\n\n 🔎 Pregunta del estudiante:\n{question}\n\n📚 Fragmentos de contexto:\n{context}\n\nen caso afirmativo solamente responde: True \ny en caso negative solamente responde: False",
+  "answer_student_prompt": "Eres un estudiante que responderá la siguiente pregunta de desarrollo usando únicamente la información proporcionada. Responde de forma clara y concisa. Si la información no cubre completamente la pregunta, responde solo lo que puedas con lo que se provee, sin inventar información externa. En caso de no poder responder la pregunta de ninguna manera da un mensaje de: No me es posible responder la pregunta con el conocimiento que poseo. No añadas en la respuesta frases del tipo: Según el texto, De acuerdo al texto, Con base en el texto. Pregunta: {question} Contexto: {context}"
+}

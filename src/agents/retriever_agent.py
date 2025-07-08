@@ -34,7 +34,7 @@ class Retriever:
     Agente de recuperación de información que utiliza FAISS y embeddings para recuperar chunks relevantes.
     """
 
-    def __init__(self, generator : Generator, vectorizer : Vectorizer, crawler: Crawler, preprocessor: Preprocessor, document_manager: DocumentManager, text_manager: FaissManager, category_manager: FaissManager = None  ):
+    def __init__(self, generator : Generator, vectorizer : Vectorizer,document_manager: DocumentManager, text_manager: FaissManager, crawler: Crawler = None, preprocessor: Preprocessor = None, category_manager: FaissManager = None  ):
         self.text_manager = text_manager
         self.category_manager = category_manager
         self.crawler = crawler

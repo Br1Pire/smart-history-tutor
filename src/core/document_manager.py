@@ -14,7 +14,7 @@ logging.basicConfig(
 )
 
 class DocumentManager:
-    def __init__(self, raw_path = None, processed_path = None, prompts_path = None, titles_path = None, ids_path = None):
+    def __init__(self, raw_path = None, processed_path = None, prompts_path = None, titles_path = None, ids_path = None, load = True):
         
         self.raw_path = raw_path
         self.processed_path = processed_path
@@ -28,13 +28,15 @@ class DocumentManager:
         self.titles = []
         self.ids = []
 
-        self.load_all()
+        if load : self.load_all()
+            
+        else: self.prompts = self._load_json(self.prompts_path)
 
     def _load_json(self, path):
         
         try:
             with open(path, "r", encoding="utf-8") as f:
-                logging.info(f"📂 Chunks cargados desde: {path}")
+                logging.info(f"📂 Datos cargados desde: {path}")
                 return json.load(f)
         except FileNotFoundError:
             logging.error(f"❌ Error: Archivo '{path}' no encontrado.")
@@ -45,6 +47,12 @@ class DocumentManager:
         except Exception as e:
             logging.error(f"❌ Error al cargar chunks desde '{path}': {e}")
             return []    
+        
+    def clear(self):
+        self.raw_documents = []
+        self.processed_documents = []
+        self.titles = []
+        self.ids = []
     
     def _save_json(self, data, path):
         

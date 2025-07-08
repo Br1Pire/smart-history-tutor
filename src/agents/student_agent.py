@@ -9,7 +9,7 @@ from src.agents.crawler_agent import Crawler
 from src.agents.preprocessor_agent import Preprocessor
 from src.agents.retriever_agent import Retriever
 from src.core.fuzzy_system import calculate_learning_and_skip
-from src import config
+from src.core.motivation_fuzzy_system import calculate_delta_motivation
 
 nlp = spacy.load("es_core_news_md")
 
@@ -46,7 +46,7 @@ class StudentAgent:
 
         print(f"🎓 Student '{self.name}' initialized.")
 
-    def learn_chunk(self, chunk_text):
+    def learn_chunk(self, text, subtopic, index):
         """
         El estudiante procesa el texto del chunk según sus características y genera su embedding parcial.
         """
@@ -58,7 +58,7 @@ class StudentAgent:
             return
 
         # 2. Procesa oraciones con SpaCy
-        doc = nlp(chunk_text)
+        doc = nlp(text)
         sentences = [sent.text.strip() for sent in doc.sents]
         n = len(sentences)
 
@@ -77,25 +77,87 @@ class StudentAgent:
         # 5. Crea texto parcial retenido
         retained_text = " ".join(retained_sentences)
 
-        # 6. Vectoriza texto retenido
-        retained_embedding = self.vectorizer.vectorize_query(retained_text)
+        save_chunk = {
+            'id': f"{subtopic}_{index}",
+            'title': subtopic,
+            'content': retained_text
+        }
 
-        # 7. Normaliza
-        retained_embedding = retained_embedding / np.linalg.norm(retained_embedding, axis=1, keepdims=True)
-
-        # 8. Guarda en FAISS
-        self.faiss_manager.add(retained_embedding)
-
-        # 9. Registra en conocimiento (opcional)
-        # self.knowledge.append((retained_text, retained_embedding))
-
+        self.document_manager.add_chunks([save_chunk])
+        
         print(f"✅ {self.name} aprendió un chunk parcial con {num_to_retain}/{n} oraciones retenidas.")
 
+    def take_session(self, session):
+
+        for topic in session['texts']:
+            for i, text in enumerate(topic[1]):
+                self.learn_chunk(text, topic[0], i+1)
+
+        
+
     def forget(self):
-        """
-        Opcional: modela olvido reduciendo magnitud o eliminando embeddings en FAISS.
-        """
-        pass
+        total_chunks = len(self.document_manager.processed_documents)
+
+        if total_chunks == 0:
+            print("🔔 No hay chunks en memoria para olvidar.")
+            return
+
+        # Decide probabilísticamente si olvida
+        if np.random.rand() < self.forgetting_rate:
+            idx_to_forget = np.random.choice(total_chunks)
+            forgotten_chunk = self.document_manager.processed_documents.pop(idx_to_forget)
+            print(f"🧠 Forget aplicado: chunk {idx_to_forget} olvidado -> {forgotten_chunk.get('title', 'sin título')}.")
+
+        else:
+            print(f"🧠 Forget no aplicado esta vez (ratio={self.forgetting_rate}).")
+
+    def persist_faiss(self):
+        self.vectorizer.vectorize(False,False)
 
     def update_learning_and_skip(self):
         self.learning_rate, self.skip_probability = calculate_learning_and_skip(self.base_learning_rate,self.base_skip_probability,self.motivation,self.state,self.environment)
+
+    def update_environment(self, value):
+        self.environment = value
+
+    def update_motivation(self, score):
+        delta = calculate_delta_motivation(self.learning_rate, self.skip_probability, score)
+        new_motivation = max(1, min(self.motivation+delta, 10))
+        self.motivation = round(new_motivation,1)
+
+    def get_environment(self):
+        return self.environment
+
+    def answer_test(self, test):
+        """
+        El estudiante responde un test de desarrollo.
+
+        Args:
+            test (list of dict): cada dict con keys 'pregunta' y 'respuesta_correcta'.
+
+        Returns:
+            list of dict: respuestas generadas con evaluación simple.
+        """
+        results = []
+
+        for item in test:
+            question = item["question"]
+
+            question_embedding = self.vectorizer.vectorize_query(question)
+
+            retrieved_chunks = self.retriever.retrieve_chunks_from_vector(question_embedding, 10)
+
+            context = "\n".join([f"- {chunk['chunk'].strip()}" for chunk in retrieved_chunks])
+
+            answer = self.generator.answer_question_student(question,context)
+
+            results.append({
+                "name": self.name,
+                "subtopic": item["subtopic"],
+                "question": question,
+                "answer": answer,
+            })
+
+            print(f"📝 {self.name} respondió la pregunta: '{question}'")
+
+        return results

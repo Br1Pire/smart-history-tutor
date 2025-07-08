@@ -102,7 +102,7 @@ class Preprocessor:
         return splits
 
 
-    def _chunk_section_text(self, section_name, text):
+    def _chunk_section_text(self, section_name, text, clean = True):
         """
         Genera chunks de un texto aplicando la metaheurística de chunking.
 
@@ -114,7 +114,10 @@ class Preprocessor:
             list: Lista de chunks generados.
         """
         logging.info(f"🔹 Chunking sección: '{section_name or 'General'}'")
-        doc = nlp(self._clean_text(text))
+        if clean:
+            doc = nlp(self._clean_text(text))
+        else:
+            doc = nlp(text)
         sentences = [sent.text.strip() for sent in doc.sents]
         chunk_results, score = chunk_section_text_metaheuristic(section_name, sentences, MAX_CHUNK_SIZE, MIN_CHUNK_SIZE)
         logging.info(f"✅ {len(chunk_results)} chunks generados (Score: {score:.2f}) para sección: '{section_name or 'General'}'")
