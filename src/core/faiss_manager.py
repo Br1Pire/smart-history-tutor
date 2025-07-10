@@ -108,39 +108,7 @@ class FaissManager:
         faiss.write_index(self.index, str(self.index_path))
         print(f"💾 Index guardados en {self.index_path}.")
 
-# =============================
-# Ejemplo de uso (sin embeddings aquí)
-
-if __name__ == "__main__":
-    # Configuración de paths
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    INDEX_PATH = os.path.join(BASE_DIR, "faiss_index.index")
-
-    faiss_manager = FaissManager(INDEX_PATH)
-
-    # Ejemplo de vectores generados externamente
-    dummy_vectors = np.random.rand(2, 768).astype("float32")
-    dummy_vectors /= np.linalg.norm(dummy_vectors, axis=1, keepdims=True)
-
-    faiss_manager.add(dummy_vectors)
-
-    print(f"📊 Total vectors in index: {faiss_manager.index.ntotal}")
-
-    faiss_manager.add_unique(dummy_vectors)
-
-    print(f"📊 Total vectors in index: {faiss_manager.index.ntotal}")
-
-
-    query_vector = np.random.rand(1, 768).astype("float32")
-    query_vector /= np.linalg.norm(query_vector)
-
-    
-
-    # Ejemplo de búsqueda
-    query_vector = np.random.rand(1, 768).astype("float32")
-    distances, indices = faiss_manager.search(query_vector)
-    print("\n🔎 Resultados de búsqueda (distancias, indices):")
-    print(distances, indices)
-
-    # Guardar cambios
-    faiss_manager.save()
+    def clean_index(self):
+        self.index = faiss.IndexFlatIP(self.dim)
+        print('✅Indice reseteado')
+        

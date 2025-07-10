@@ -88,6 +88,7 @@ class StudentAgent:
         """Limpia toda la memoria almacenada del estudiante."""
         logging.info(f"{self.name} está limpiando su memoria.")
         self.document_manager.clear()
+        self.faiss_manager.clean_index()
 
     def learn_chunk(self, text, subtopic, index):
         """Procesa y retiene parte de un texto según sus características de aprendizaje.

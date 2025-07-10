@@ -33,17 +33,11 @@ class MetaheuristicOptimizer:
         """
         population = self.initialize_population(subtopic_list, constraints)
 
-        print("\n=== GENERACIÓN 0 ===")
-        for ind in population:
-            print(f"Fitness rápido: {ind['fitness']:.4f}")
-
-        parents = [self.tournament_selection(population) for _ in range(self.population_size // 2)]
-
         print("\n=== Padres seleccionados ===")
-        for p in parents:
-            print(f"Num clases: {p['num_classes']}, Cobertura: {p['coverage']:.2f}")
+        for p in population:
+            print(f"Num clases: {p["distribution"]['num_classes']}, Cobertura: {p["distribution"]['coverage']:.2f}")
 
-        return parents
+        return population
 
     def generate_class_distribution(self, subtopic_query_pairs, constraints):
         """
@@ -192,7 +186,7 @@ class MetaheuristicOptimizer:
         tournament.sort(key=lambda x: x["fitness"], reverse=True)
         winner = tournament[0]
         logging.info(f"🏆 Selección torneo -> Fitness ganador: {winner['fitness']:.4f}")
-        return winner["distribution"]
+        return winner
 
     def crossover(self, parent1, parent2):
         sessions1 = parent1["sessions"]

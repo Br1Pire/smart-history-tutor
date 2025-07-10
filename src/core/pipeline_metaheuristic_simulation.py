@@ -48,11 +48,11 @@ def run_pipeline(constraints = params.CONSTRAINTS, topic = params.TOPIC, topics_
     evaluated_parents = []
     for idx, p in enumerate(parents):
         logging.info(f"Evaluando padre inicial {idx+1}/{len(parents)}.")
-        enriched_plan = tutor.generate_plan(p, texts, tests, constraints)
+        enriched_plan = tutor.generate_plan(p["distribution"], texts, tests)
         simulation_result = run_simulation_cycle(enriched_plan, tutor, students)
-        fitness = optimizer.evaluate_fitness_with_scores(p, simulation_result['global_average_score'], constraints)
+        fitness = optimizer.evaluate_fitness_with_scores(p["distribution"], simulation_result['global_average_score'], constraints)
         evaluated_parents.append({
-            "distribution": p,
+            "distribution": p["distribution"],
             "fitness": fitness
         })
 
@@ -72,8 +72,8 @@ def run_pipeline(constraints = params.CONSTRAINTS, topic = params.TOPIC, topics_
 
         children = []
         while len(children) < optimizer.population_size - elitism_size:
-            p1 = random.choice([x["distribution"] for x in evaluated_parents])
-            p2 = random.choice([x["distribution"] for x in evaluated_parents])
+            p1 = optimizer.tournament_selection(evaluated_parents)["distribution"]
+            p2 = optimizer.tournament_selection(evaluated_parents)["distribution"]
             child = optimizer.crossover(p1, p2)
             child = optimizer.mutate(child, subtopics)
             children.append(child)
@@ -82,7 +82,7 @@ def run_pipeline(constraints = params.CONSTRAINTS, topic = params.TOPIC, topics_
         evaluated_children = []
         for idx, child in enumerate(children):
             logging.info(f"Evaluando hijo {idx+1}/{len(children)}.")
-            enriched_plan = tutor.generate_plan(child, texts, tests, constraints)
+            enriched_plan = tutor.generate_plan(child, texts, tests)
             simulation_result = run_simulation_cycle(enriched_plan, tutor, students)
             fitness = optimizer.evaluate_fitness_with_scores(child, simulation_result['global_average_score'], constraints)
             evaluated_children.append({
@@ -122,6 +122,6 @@ if __name__ == '__main__':
     population_size = 6
     tournament_size = 3
     students_amount = 3
-    students_proportions = (100,0,0)
+    students_proportions = (0,0,100)
 
     run_pipeline(constraints, topic, topics_range, population_size, tournament_size, students_amount, students_proportions)

@@ -42,7 +42,7 @@ TEXTS_FILE = VECTORSTORE_DIR / "texts.pkl"
 
 # MODELS
 MODEL_PATH = MODEL_DIR / "all-mpnet-base-v2"
-GENERATIVE_MODEL_NAME = "gemini-2.5-flash"
+GENERATIVE_MODEL_NAME = "gemini-2.0-flash"
 
 # PROMPT FILES
 PROMPTS_FILE = DATA_DIR / "prompts" / "tutor_prompts.json"
@@ -63,5 +63,5 @@ MAX_ATTEMPTS = 3
 CATEGORY_WEIGHT = 0.3
 
 # API KEYS
-# GOOGLE_API_KEY = "AIzaSyAAY_YacYAzOV-klmHA_uFjyFDSMrEFtDI"
+#GOOGLE_API_KEY = "AIzaSyAAY_YacYAzOV-klmHA_uFjyFDSMrEFtDI"
 GOOGLE_API_KEY = 'AIzaSyDnzj30bwm4aQ4Yptygpuy-DlBOz_JN_cg'

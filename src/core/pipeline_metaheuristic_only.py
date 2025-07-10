@@ -22,9 +22,9 @@ def run_pipeline(constraints, topic, topics_range, population_size, tournament_s
     evaluated_parents = []
     for p in parents:
         fake_score = random.uniform(0.4, 1.0)
-        fitness = optimizer.evaluate_fitness_with_scores(p, fake_score, constraints)
+        fitness = optimizer.evaluate_fitness_with_scores(p["distribution"], fake_score, constraints)
         evaluated_parents.append({
-            "distribution": p,
+            "distribution": p["distribution"],
             "fitness": fitness
         })
 
@@ -43,8 +43,8 @@ def run_pipeline(constraints, topic, topics_range, population_size, tournament_s
 
         children = []
         while len(children) < (optimizer.population_size - elite_size):
-            p1 = random.choice([x["distribution"] for x in evaluated_parents])
-            p2 = random.choice([x["distribution"] for x in evaluated_parents])
+            p1 = optimizer.tournament_selection(evaluated_parents)["distribution"]
+            p2 = optimizer.tournament_selection(evaluated_parents)["distribution"]
             child = optimizer.crossover(p1, p2)
             child = optimizer.mutate(child, subtopics)
             children.append(child)
