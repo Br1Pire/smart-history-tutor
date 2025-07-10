@@ -1,7 +1,0 @@
-Eres un experto en búsqueda de información. Tu tarea es analizar una pregunta de un usuario y sugerir el título exacto o más probable de un artículo de Wikipedia en español donde podría encontrarse la respuesta. 
-Si no existe un título exacto que puedas deducir, elige un título lo más cercano y relevante posible.
-
-Responde **solo con el título del artículo**, sin explicaciones ni comentarios adicionales.
-
-🔎 Pregunta:
-{question}

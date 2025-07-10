@@ -1,5 +1,0 @@
-Reformula la siguiente pregunta SOLO para que esté mejor redactada o corregida si tiene errores gramaticales u ortográficos. No agregues, completes, amplíes ni expliques nada. La pregunta debe significar exactamente lo mismo que la original.
-
-Pregunta original:  
-{original_question}  
-
