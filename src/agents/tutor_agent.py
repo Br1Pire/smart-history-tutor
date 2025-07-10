@@ -10,10 +10,8 @@ from src.core.faiss_manager import FaissManager
 from src.core.document_manager import DocumentManager
 from src.config import LOG_FILES
 
-
 # Configuración de logs
 LOG_FILE = LOG_FILES["tutor"]
-
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
@@ -24,8 +22,16 @@ logging.basicConfig(
 )
 
 class Tutor:
+    """
+    Tutor inteligente capaz de generar subtemas, textos, pruebas, planes de clases y evaluar resultados estudiantiles.
+    """
 
-    def __init__(self, crawler: Crawler, preprocessor: Preprocessor, vectorizer: Vectorizer, generator: Generator, retriever: Retriever,index_manager: FaissManager, category_manager: FaissManager, document_manager: DocumentManager):
+    def __init__(self, crawler: Crawler, preprocessor: Preprocessor, vectorizer: Vectorizer,
+                 generator: Generator, retriever: Retriever, index_manager: FaissManager,
+                 category_manager: FaissManager, document_manager: DocumentManager):
+        """
+        Inicializa el Tutor con todos sus agentes y managers asociados.
+        """
         self.crawler = crawler
         self.preprocessor = preprocessor
         self.vectorizer = vectorizer
@@ -34,108 +40,117 @@ class Tutor:
         self.index_manager = index_manager
         self.category_manager = category_manager
         self.document_manager = document_manager
+        logging.info("✅ Tutor inicializado correctamente.")
 
     def answer_question(self, question):
+        """
+        Responde una pregunta utilizando recuperación estratégica.
+        """
+        logging.info(f"🔎 Respondiendo pregunta: {question}")
         return self.retriever.strategic_retrieve(question)
-    
+
     def generate_subtopics(self, topic, amount_range):
-        return self.generator.generate_subtopics(topic,amount_range[0],amount_range[1])
-    
+        """
+        Genera subtemas para un tema dado dentro de un rango de cantidad.
+        """
+        logging.info(f"📚 Generando subtemas para {topic}, rango: {amount_range}")
+        return self.generator.generate_subtopics(topic, amount_range[0], amount_range[1])
+
     def retrive_chunks_from_subtopics(self, topics):
+        """
+        Recupera chunks relevantes para cada subtema.
+        """
+        logging.info("🔍 Recuperando chunks para subtemas seleccionados.")
         subtopics = [pair[0] for pair in topics]
         querys = [pair[1] for pair in topics]
-        
-
-        subtopics_with_chunks ={}
-
-        for subtopic, query in zip(subtopics,querys):
-            retrived_chunks = self.retriever.retrieve_chunks_from_vector(self.vectorizer.vectorize_query(query),top_k=15)
+        subtopics_with_chunks = {}
+        for subtopic, query in zip(subtopics, querys):
+            retrieved_chunks = self.retriever.retrieve_chunks_from_vector(
+                self.vectorizer.vectorize_query(query), top_k=15)
             subtopics_with_chunks[subtopic] = {
                 "subtopic": subtopic,
                 "query": query,
-                "chunks": [{"chunk_id": chunk["id"], "text": chunk["chunk"]} for chunk in retrived_chunks]
+                "chunks": [{"chunk_id": chunk["id"], "text": chunk["chunk"]} for chunk in retrieved_chunks]
             }
-
+        logging.info("✅ Chunks recuperados para todos los subtemas.")
         return subtopics_with_chunks
-    
+
     def generate_texts_from_subtopics(self, subtopics_with_chunks: dict):
-
+        """
+        Genera textos explicativos para cada subtema usando sus chunks.
+        """
+        logging.info("📝 Generando textos para subtemas.")
         subtopics_with_text = {}
-
         for subtopic, value in subtopics_with_chunks.items():
-            text = self.generator.generate_text_for_subtopic(subtopic,value['chunks'])
-            chunked_texts = [x[1] for x in self.preprocessor._chunk_section_text(subtopic,text,clean=False)]
-
+            text = self.generator.generate_text_for_subtopic(subtopic, value['chunks'])
+            chunked_texts = [x[1] for x in self.preprocessor._chunk_section_text(subtopic, text, clean=False)]
             subtopics_with_text[subtopic] = {
                 "subtopic": subtopic,
                 "query": value["query"],
                 "chunks": value['chunks'],
-                "texts": chunked_texts 
+                "texts": chunked_texts
             }
-
+        logging.info("✅ Textos generados para todos los subtemas.")
         return subtopics_with_text
 
     def generate_tests_from_subtopics(self, subtopics_with_text: dict):
-
+        """
+        Genera pruebas de desarrollo para cada subtema a partir de sus textos.
+        """
+        logging.info("🧪 Generando pruebas de desarrollo para subtemas.")
         tests = {}
-
         for subtopic, value in subtopics_with_text.items():
-            test_item = self.generator.generate_development_question(subtopic,"".join(value['texts']))
+            test_item = self.generator.generate_development_question(subtopic, "".join(value['texts']))
             tests[subtopic] = {
                 "subtopic": subtopic,
                 "question": test_item.get("pregunta"),
                 "answer": test_item.get("respuesta_correcta")
             }
-        
+        logging.info("✅ Pruebas generadas para todos los subtemas.")
         return tests
 
-
-    def generate_plan(self, subtopic_query_pairs, texts, tests, constraints):
+    def generate_plan(self, class_distribution, texts, tests):
         """
-        Genera un plan de clases usando el método heurístico para distribuir
-        clases y luego recupera chunks reales para cada subtopic.
+        Genera un plan de clases completo combinando la distribución, los textos y las pruebas.
         """
-
-        class_distribution = self.generate_class_distribution(
-            subtopic_query_pairs,
-            constraints["num_classes_range"],
-            constraints["coverage"]
-        )
-
+        logging.info("📅 Generando plan de clases completo.")
         sessions_with_text = []
         topics = set()
-
         for session in class_distribution["sessions"]:
             sessions_with_text.append({
                 "session_id": session["session_id"],
                 "type": session['type'],
                 "subtopics": session["subtopics"],
-                "texts": [(subtopic,texts[subtopic]['texts']) for subtopic in session["subtopics"]]
-   
+                "texts": [(subtopic, texts[subtopic]['texts']) for subtopic in session["subtopics"]]
             })
-
             topics.update(topic for topic in session['subtopics'])
-
         add_tests = [tests[topic] for topic in topics]
-
         plan = {
             "coverage_used": class_distribution["coverage"],
             "num_classes_used": class_distribution["num_classes"],
             "sessions": sessions_with_text,
             "test": add_tests,
         }
-
-        print(f"✅ Plan generado con {plan['num_classes_used']} clases, cobertura: {plan['coverage_used']:.2%}")
+        logging.info(f"✅ Plan generado con {plan['num_classes_used']} clases, cobertura: {plan['coverage_used']:.2%}.")
         return plan
+    
+    def generate_class_distribution(self, subtopic_query_pairs, constraints):
+        """
+        Genera una distribución heurística de clases mezclando sesiones de contenido y repaso
+        hasta alcanzar una cobertura objetivo dentro de los rangos especificados.
 
-    def generate_class_distribution(self, subtopic_query_pairs, num_classes_range, min_coverage):
+        Args:
+            subtopic_query_pairs (list of tuples): Lista de subtemas con sus consultas.
+            constraints (dict): Diccionario con cobertura mínima y rango de clases.
+
+        Returns:
+            dict: Distribución generada con número de clases, cobertura lograda y detalle de sesiones.
         """
-        Genera un plan de clases heurístico con target coverage aleatorio,
-        mezclando clases de contenido y repaso desde el inicio.
-        """
+        logging.info("🎯 Generando distribución de clases (heurística).")
         subtopic_list = [pair[0] for pair in subtopic_query_pairs]
 
-        min_classes, max_classes = num_classes_range
+        min_coverage = constraints["coverage"]
+        min_classes, max_classes = constraints["num_classes_range"]
         num_classes = random.randint(min_classes, max_classes)
 
         plan = []
@@ -168,8 +183,6 @@ class Tutor:
                     taught_subtopics.update(subtopics_for_class)
                     for s in subtopics_for_class:
                         review_counts.setdefault(s, 0)
-                else:
-                    pass
             else:
                 if random.random() < 0.5:
                     available_review = [s for s in taught_subtopics if review_counts.get(s, 0) < 1]
@@ -196,63 +209,51 @@ class Tutor:
 
         coverage = len(taught_subtopics) / len(subtopic_list)
 
-        print(f"✅ Distribucion de clases generada con {len(plan)} clases. Covertura objetivo: {target_coverage:.2%}. Cobertura alcanzada: {coverage:.2%}")
+        logging.info(f"✅ Distribución generada con {len(plan)} clases. Cobertura objetivo: {target_coverage:.2%}. Cobertura alcanzada: {coverage:.2%}")
         for s in plan:
-            print(f"📝 {s}")
+            logging.info(f"🗂️ {s}")
 
         return {
             "num_classes": len(plan),
             "coverage": coverage,
             "sessions": plan
         }
-    
+
 
     def evaluate_student_tests(self, student_tests, tests_generated):
         """
-        Evalúa los tests de estudiantes comparando sus respuestas con las correctas usando coseno manual.
-
-        Args:
-            student_tests (list of list of str): lista de tests. Cada test es una lista de respuestas del estudiante.
-            tests_generated (list of dict): cada dict tiene {"pregunta": str, "respuesta_correcta": str}
+        Evalúa respuestas de estudiantes comparándolas con las correctas usando similaridad de coseno.
 
         Returns:
-            list of dict: resultados por estudiante con promedio y detalles.
+            list of dict: resultados con promedio y detalles por estudiante.
         """
-
+        logging.info("🔬 Evaluando tests de estudiantes.")
         results = []
-
-        # Vectoriza las respuestas correctas una sola vez
+        
         for question in tests_generated:
             question['vectorized_answer'] = self.vectorizer.vectorize_query(question['answer'])
-
         for student_test in student_tests:
             scores = []
             details = []
-
             for question in student_test:
                 student_vec = self.vectorizer.vectorize_query(question['answer'])[0]
                 for x in tests_generated:
                     if x['subtopic'] == question['subtopic']:
                         correct_vec = x['vectorized_answer'][0]
                         correct_ans = x['answer']
-
                 similarity = np.dot(student_vec, correct_vec)
                 scores.append(similarity)
-
                 details.append({
-                    "subtopic":question['subtopic'] ,
+                    "subtopic": question['subtopic'],
                     "student_response": question['answer'],
                     "correct_answer": correct_ans,
-                    "score": similarity
+                    "score": float(similarity)
                 })
-
             avg_score = np.mean(scores)
-
             results.append({
                 "student_name": student_test[0]['name'],
-                "average_score": avg_score,
+                "average_score": float(avg_score),
                 "details": details
             })
-
+        logging.info("✅ Evaluación de tests completada.")
         return results
-

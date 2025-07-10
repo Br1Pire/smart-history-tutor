@@ -24,7 +24,9 @@ LOG_FILES = {
     "chunking": LOG_DIR / "metaheuristic_chunking.log",
     "faiss_manager": LOG_DIR / "faiss_manager.log",
     "document_manager": LOG_DIR / "document_manager.log",
-    "tutor_builder": LOG_DIR / "tutor_builder.log"
+    "tutor_builder": LOG_DIR / "tutor_builder.log",
+    "metaheuristic": LOG_DIR / "metaheuristic.log",
+    "student": LOG_DIR / "student_agent.log"
 }
 
 # DATA FILES
@@ -40,7 +42,7 @@ TEXTS_FILE = VECTORSTORE_DIR / "texts.pkl"
 
 # MODELS
 MODEL_PATH = MODEL_DIR / "all-mpnet-base-v2"
-GENERATIVE_MODEL_NAME = "gemini-2.0-flash"
+GENERATIVE_MODEL_NAME = "gemini-2.5-flash"
 
 # PROMPT FILES
 PROMPTS_FILE = DATA_DIR / "prompts" / "tutor_prompts.json"

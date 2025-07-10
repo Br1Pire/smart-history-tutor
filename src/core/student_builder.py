@@ -19,23 +19,18 @@ def create_student(name, learning_rate_range, skip_probability_range, forgetting
     Crea un estudiante con todos sus componentes asociados inicializados.
     """
 
-    # 🔢 Asignar learning rate y forgetting rate aleatorios dentro de su rango
     learning_rate = random.uniform(*learning_rate_range)
     skip_probability = random.uniform(*skip_probability_range)
 
-    # 🔢 Asignar skip_probability si es None
     if forgetting_rate is None:
-        forgetting_rate = random.uniform(0.0, 0.5)
+        forgetting_rate = random.uniform(0.0, 0.3)
 
-    # 🔢 Asignar detail_preference si es None
     if detail_preference is None:
         detail_preference = random.choice(["start", "end", "neutral"])
 
-    # 🔢 Asignar noise_factor si es None
     if noise_factor is None:
         noise_factor = round(random.uniform(0.0, 0.1),3)
 
-    # 🔢 Asignar motivation, state, environment si son None
     if motivation is None:
         motivation = random.randint(1, 10)
     if state is None:
@@ -43,20 +38,17 @@ def create_student(name, learning_rate_range, skip_probability_range, forgetting
     if environment is None:
         environment = random.randint(1, 10)
 
-    # 📝 Crear paths
     timestamp = generate_timestamp()
     doc_path = config.DOC_FOLDER / f"{name}_{timestamp}.json"
     index_path = config.FAISS_FOLDER / f"{name}_{timestamp}.index"
     id_path = config.FAISS_FOLDER / f"{name}_{timestamp}.json"
 
-    # 🚀 Inicializar managers y agentes
     doc_manager = DocumentManager(processed_path=doc_path, prompts_path=config.STUDENTS_PROMPTS_FILE, ids_path=id_path, load=False)
     faiss_manager = FaissManager(index_path=index_path)
     vectorizer = Vectorizer(document_manager=doc_manager, faiss_manager=faiss_manager)
     generator = Generator(document_manager=doc_manager)
     retriever = Retriever(generator=generator, vectorizer=vectorizer, document_manager=doc_manager, text_manager=faiss_manager)
 
-    # 👤 Construir el estudiante
     student = StudentAgent(
         name=name,
         faiss_manager=faiss_manager,
@@ -92,7 +84,6 @@ def create_multiple_students(amount, students_proportions: tuple = None):
     if students_proportions is None: balanced_counts = (None, None, None)
     else: balanced_counts = balance_percentages(students_proportions, amount)
 
-    # 📚 Lista de nombres aleatorios
     names_pool = ["Carlos", "Ana", "Luis", "María", "Jorge", "Carmen", "Pedro", "Laura", "José", "Paula",
                   "Diego", "Lucía", "Antonio", "Isabel", "Miguel", "Andrea", "Daniel", "Sofía", "Raúl", "Marta",
                   "Rubén", "Elena", "Jesús", "Sara", "Óscar", "Patricia", "Iván", "Cristina", "Sergio", "Clara",
@@ -103,28 +94,24 @@ def create_multiple_students(amount, students_proportions: tuple = None):
 
     categories = ["aventajados", "normales", "deficientes"]
 
-    # 🔁 Crear estudiantes por categoría
     for cat, count in zip(categories, balanced_counts):
         for _ in range(count):
 
-            # ⚡ Rangos por categoría
             if cat == "aventajados":
-                learning_rate_range = (0.7, 1.0)
-                skip_probability_range = (0.0, 0.2)
+                learning_rate_range = (0.8, 1.0)
+                skip_probability_range = (0.0, 0.15)
             elif cat == "normales":
-                learning_rate_range = (0.5, 0.8)
-                skip_probability_range = (0.2, 0.4)
+                learning_rate_range = (0.6, 0.8)
+                skip_probability_range = (0.15, 0.3)
             else:  # deficientes
-                learning_rate_range = (0.2, 0.5)
+                learning_rate_range = (0.4, 0.6)
                 skip_probability_range = (0.3, 0.5)
 
-            # 🎲 Asignar nombre aleatorio o genérico
             if names_pool:
                 name = names_pool.pop(random.randint(0, len(names_pool)-1))
             else:
                 name = f"Student_{len(students)+1}"
 
-            # 🚀 Crear estudiante
             student = create_student(
                 name=name,
                 learning_rate_range=learning_rate_range,
@@ -216,32 +203,4 @@ def balance_percentages(percentages: tuple, quantity: int) -> tuple:
             final_distributed_values[0] += difference_for_quantity
 
     return tuple(final_distributed_values)
-
-# ================================
-# 🔬 Ejemplo de uso
-# ================================
-
-if __name__ == "__main__":
-    # 🔧 Parámetros de prueba
-    amount = 10
-    proportions = (30, 50, 20)  # 30% aventajados, 50% normales, 20% deficientes
-
-    # 🚀 Crear estudiantes
-    students = create_multiple_students(amount, proportions)
-
-    # 📊 Mostrar resultados
-    print(f"✅ {len(students)} estudiantes creados.\n")
-
-    for idx, student in enumerate(students):
-        print(f"{idx+1}. {student.name} | LR: {student.learning_rate:.2f} | FR: {student.forgetting_rate:.2f} | SP: {student.skip_probability:.2f} | DP: {student.detail_preference} | NF: {student.noise_factor} | M: {student.motivation} | E: {student.environment} | S: {student.state}")
-
-    scores = [0.95, 0.72, 0.30, 0.88, 0.55, 0.65, 0.12, 0.99, 0.79, 0.41]
-
-    for student, score in zip(students,scores):
-        student.update_motivation(score)
-
-        print("\n")
-    
-    for idx, student in enumerate(students):
-        print(f"{idx+1}. {student.name} | LR: {student.learning_rate:.2f} | FR: {student.forgetting_rate:.2f} | SP: {student.skip_probability:.2f} | DP: {student.detail_preference} | NF: {student.noise_factor} | M: {student.motivation} | E: {student.environment} | S: {student.state}")
 
